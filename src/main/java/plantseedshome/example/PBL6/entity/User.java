@@ -1,17 +1,22 @@
 package plantseedshome.example.PBL6.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name="users")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name= "user_id")
-    private String userId;
+    private String id;
 
     @Column(name= "email")
     private String email;
@@ -28,6 +33,22 @@ public class User {
     @Column(name= "password")
     private String password;
 
-    @Column(name= "role_id")
-    private String roleId;
+    @OneToOne
+    @JoinColumn(name= "role_id")
+    private Roles roles;
+
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+    private ImageAvatar imageAvatar;
+
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+    private Shops shops;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private  Collection<Comments> comments;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private Collection<OrderDetails> orderDetails;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private Collection<Carts>carts;
 }
