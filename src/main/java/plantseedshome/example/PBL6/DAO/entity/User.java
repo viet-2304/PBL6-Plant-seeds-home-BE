@@ -1,4 +1,4 @@
-package plantseedshome.example.PBL6.entity;
+package plantseedshome.example.PBL6.DAO.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +33,7 @@ public class User {
     @Column(name= "password")
     private String password;
 
-    @OneToOne
+    @ManyToOne()
     @JoinColumn(name= "role_id")
     private Roles roles;
 

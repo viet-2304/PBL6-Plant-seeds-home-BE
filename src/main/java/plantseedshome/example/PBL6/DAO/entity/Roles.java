@@ -1,10 +1,11 @@
-package plantseedshome.example.PBL6.entity;
+package plantseedshome.example.PBL6.DAO.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "roles")
@@ -20,6 +21,6 @@ public class Roles {
     @Column(name = "role_name")
     private String roleName;
 
-    @OneToOne(mappedBy = "roles", cascade = CascadeType.ALL)
-    private User user;
+    @OneToMany(mappedBy = "roles", cascade = CascadeType.ALL)
+    private Collection<User> user;
 }

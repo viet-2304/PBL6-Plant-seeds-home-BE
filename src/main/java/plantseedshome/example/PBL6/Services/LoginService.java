@@ -1,0 +1,8 @@
+package plantseedshome.example.PBL6.Services;
+
+import plantseedshome.example.PBL6.dto.LoginRequestDto;
+import plantseedshome.example.PBL6.dto.LoginResponseDto;
+
+public interface LoginService {
+LoginResponseDto authenticate(LoginRequestDto loginRequestDto);
+}
