@@ -10,9 +10,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private String userId;
+    private String id;
     private String email;
+    private String phoneNumber;
+    private String address;
     private String userName;
     private String imageAvatar;
-    private String roleName;
+    private String roleId;
 }

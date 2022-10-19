@@ -1,24 +1,23 @@
 package plantseedshome.example.PBL6.DAO.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Table(name="users")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue
     @Column(name= "user_id")
     private String id;
 
-    @Column(name= "email")
+    @Column(name= "email", nullable = false)
     private String email;
 
     @Column(name= "phone_number")
@@ -36,12 +35,6 @@ public class User {
     @ManyToOne()
     @JoinColumn(name= "role_id")
     private Roles roles;
-
-    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
-    private ImageAvatar imageAvatar;
-
-    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
-    private Shops shops;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private  Collection<Comments> comments;
