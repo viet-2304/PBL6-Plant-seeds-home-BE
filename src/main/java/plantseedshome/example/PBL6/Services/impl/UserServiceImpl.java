@@ -31,11 +31,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(UserRegisterDto userRegisterDto) {
-        userRegisterDto.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-        userRegisterDto.setRoleId("1");
-        User user = userMapper.userRegisterToUser(userRegisterDto);
-        userRepository.save(user);
+    public String createUser(UserRegisterDto userRegisterDto) {
+        if (userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty()){
+            userRegisterDto.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+            userRegisterDto.setRoleId("1");
+            User user = userMapper.userRegisterToUser(userRegisterDto);
+            userRepository.save(user);
+            return "success";
+        } else {
+            return "error";
+        }
+
     }
 
 

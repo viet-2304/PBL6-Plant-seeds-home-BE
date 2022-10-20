@@ -18,9 +18,12 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public LoginResponseDto authenticate(@RequestBody LoginRequestDto loginRequestDto) {
+    public  ResponseEntity<LoginResponseDto> authenticate(@RequestBody LoginRequestDto loginRequestDto) {
         LoginResponseDto loginResponseDto = loginService.authenticate(loginRequestDto);
+        if (loginResponseDto.getUserDto() ==  null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
 
-        return loginResponseDto;
+        return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
 }
