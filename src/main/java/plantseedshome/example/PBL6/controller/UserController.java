@@ -32,8 +32,11 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/createUser")
-    public ResponseEntity<Void> createUser(@RequestBody UserRegisterDto userRegisterDto) {
-        userService.createUser(userRegisterDto);
+    public ResponseEntity<String> createUser(@RequestBody UserRegisterDto userRegisterDto) {
+       String res =  userService.createUser(userRegisterDto);
+       if(res == "error") {
+           return new ResponseEntity<>("Email is exist", HttpStatus.EXPECTATION_FAILED);
+       }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

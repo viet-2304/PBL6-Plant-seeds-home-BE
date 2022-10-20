@@ -3,6 +3,7 @@ package plantseedshome.example.PBL6.DAO.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -14,8 +15,9 @@ import java.util.Collection;
 @NoArgsConstructor
 public class Shops {
     @Id
-    @GeneratedValue
-    @Column(name = "shop_id")
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Column(name= "shop_id", columnDefinition = "VARCHAR(255)", insertable = false, updatable = false, nullable = false)
     private String shopId;
 
     @Column(name = "shop_name")

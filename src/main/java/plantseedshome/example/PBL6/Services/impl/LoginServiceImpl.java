@@ -1,9 +1,11 @@
 package plantseedshome.example.PBL6.Services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import plantseedshome.example.PBL6.DAO.entity.User;
 import plantseedshome.example.PBL6.DAO.repository.UserRepository;
@@ -29,25 +31,21 @@ public class LoginServiceImpl implements LoginService {
     private final JwtUtil jwtUtil;
     private final UserMapper userMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public LoginResponseDto authenticate(LoginRequestDto loginRequestDto) {
-    try {
-        customAuthenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequestDto.getEmail().trim(),
-                        loginRequestDto.getPassword())
-        );
-    } catch (BadCredentialsException e) {
-        throw new BadCredentialsException("Incorrect email or password.", e);
-    }
-
-    final UserDetails userDetails = customerUserDetailsService.loadUserByUsername(loginRequestDto.getEmail().trim());
-    final String token = jwtUtil.generateToken(userDetails);
-
         final User user = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("Incorrect email or password."));
+    if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword()) == true){
+        final UserDetails userDetails = customerUserDetailsService.loadUserByUsername(loginRequestDto.getEmail().trim());
+        final String token = jwtUtil.generateToken(userDetails);
         UserDto userDto = userMapper.userToUserDto(user);
+        userDto.setPassword("");
+        userDto.setId("");
         return  new LoginResponseDto(token, userDto);
+    }
+        return new LoginResponseDto("", null);
     }
 
 }
