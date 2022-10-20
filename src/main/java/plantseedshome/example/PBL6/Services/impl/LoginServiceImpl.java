@@ -1,7 +1,6 @@
 package plantseedshome.example.PBL6.Services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import plantseedshome.example.PBL6.DAO.entity.User;
 import plantseedshome.example.PBL6.DAO.repository.UserRepository;
 import plantseedshome.example.PBL6.Security.CustomAuthenticationManager;
-import plantseedshome.example.PBL6.Services.CustomerService;
 import plantseedshome.example.PBL6.Services.CustomerUserDetailsService;
 import plantseedshome.example.PBL6.Services.LoginService;
 import plantseedshome.example.PBL6.common.utils.JwtUtil;

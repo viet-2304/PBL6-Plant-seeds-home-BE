@@ -2,14 +2,18 @@ package plantseedshome.example.PBL6.controller;
 
 //import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
 import plantseedshome.example.PBL6.DAO.entity.User;
 import plantseedshome.example.PBL6.DAO.repository.UserRepository;
 import plantseedshome.example.PBL6.Services.LoginService;
+import plantseedshome.example.PBL6.Services.UserService;
 import plantseedshome.example.PBL6.Services.impl.LoginServiceImpl;
 import plantseedshome.example.PBL6.dto.LoginRequestDto;
 import plantseedshome.example.PBL6.dto.UserDto;
+import plantseedshome.example.PBL6.dto.UserRegisterDto;
 
 import java.util.*;
 
@@ -24,9 +28,14 @@ public class UserController {
     @Autowired
     LoginService loginService;
 
-//    public UserController(ModelMapper mapper) {
-//        this.mapper = mapper;
-//    }
+    @Autowired
+    UserService userService;
+
+    @PostMapping("/createUser")
+    public ResponseEntity<Void> createUser(@RequestBody UserRegisterDto userRegisterDto) {
+        userService.createUser(userRegisterDto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
     @GetMapping("/getAll")
     public List<User> getUser() {
@@ -45,22 +54,4 @@ public class UserController {
 //            tempUsersDto.add(tempDto);
 //        }
         return tempUsers;    }
-
-//    @GetMapping
-//    public UserDto getUserByName(@RequestBody LoginRequestDto loginRequestDto) {
-//        return loginService.Login(loginRequestDto);
-////        User user =  userRepository.findById("1").get();
-////        UserDto tempDto = new UserDto();
-////        tempDto.setId(user.getId());
-////        tempDto.setUserName(user.getUserName());
-////        tempDto.setRoleName(user.getRoles().getRoleName());
-////        tempDto.setAddress(user.getAddress());
-////        tempDto.setEmail(user.getEmail());
-////        tempDto.setPhoneNumber(user.getPhoneNumber());
-//
-////        tempDto.setImageAvatar("temp.getImageAvatar().getAvatarUrl()");
-//
-////        UserDto userDto = mapper.map(user, UserDto.class);
-////        return tempDto;
-//    }
 }

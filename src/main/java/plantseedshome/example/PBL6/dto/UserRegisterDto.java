@@ -7,15 +7,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private String id;
+@AllArgsConstructor
+public class UserRegisterDto {
     private String email;
     private String phoneNumber;
     private String address;
     private String userName;
-    private String imageAvatar;
     private String password;
     private String roleId;
 }

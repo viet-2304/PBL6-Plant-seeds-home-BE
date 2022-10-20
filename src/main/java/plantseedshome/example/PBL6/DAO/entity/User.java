@@ -1,6 +1,8 @@
 package plantseedshome.example.PBL6.DAO.entity;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -13,8 +15,9 @@ import java.util.Collection;
 @Setter
 public class User {
     @Id
-    @GeneratedValue
-    @Column(name= "user_id")
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Column(name= "user_id", columnDefinition = "VARCHAR(255)", insertable = false, updatable = false, nullable = false)
     private String id;
 
     @Column(name= "email", nullable = false)
