@@ -1,4 +1,4 @@
-package plantseedshome.example.PBL6.entity;
+package plantseedshome.example.PBL6.DAO.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class Shops {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "facebook")
+    @Column(name = "facebook_address")
     private String facebook;
 
     @OneToOne

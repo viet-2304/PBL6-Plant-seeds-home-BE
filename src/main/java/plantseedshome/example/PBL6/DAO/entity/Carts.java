@@ -1,33 +1,31 @@
-package plantseedshome.example.PBL6.entity;
+package plantseedshome.example.PBL6.DAO.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
+@Table(name = "carts")
 @Data
-@Table(name = "order_details")
-@NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetails {
+@NoArgsConstructor
+public class Carts {
     @Id
     @GeneratedValue
-    @Column(name = "order_details_id")
+    @Column(name = "STT")
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Orders orders;
+    @Column(name = "number_of_product")
+    private String numberOfProduct;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User users;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name="product_id")
     private Products products;
 
 }
