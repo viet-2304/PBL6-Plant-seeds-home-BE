@@ -32,9 +32,9 @@ public class ProductController {
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
-    @GetMapping()
-    public ResponseEntity<ProductDto> getListNewProduct() {
-        List<ProductDto> newProduct = productService;
-        return new ResponseEntity<>(newProduct, HttpStatus.OK);
-    }
+//    @GetMapping()
+//    public ResponseEntity<ProductDto> getListNewProduct() {
+//        List<ProductDto> newProduct = productService;
+//        return new ResponseEntity<>(newProduct, HttpStatus.OK);
+//    }
 }

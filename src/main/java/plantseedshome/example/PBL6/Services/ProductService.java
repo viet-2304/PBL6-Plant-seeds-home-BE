@@ -11,5 +11,5 @@ public interface ProductService {
 
     ProductDto findProductById(String id);
 
-    List<ProductDto> getListNewProduct();
+//    List<ProductDto> getListNewProduct();
 }

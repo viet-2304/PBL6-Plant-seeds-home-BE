@@ -31,8 +31,8 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productToProductDto(productRepository.findById(id).get());
     }
 
-    @Override
-    public List<ProductDto> getListNewProduct() {
-        List<ProductDto> newProduct = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<ProductDto> getListNewProduct() {
+//        List<ProductDto> newProduct = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
+//    }
 }
