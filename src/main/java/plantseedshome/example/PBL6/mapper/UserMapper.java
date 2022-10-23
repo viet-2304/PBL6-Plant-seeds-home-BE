@@ -14,10 +14,7 @@ public interface UserMapper {
     @Mapping(source = "roleId", target = "roles.roleId")
     User userRegisterToUser(UserRegisterDto userRegisterDto);
 
-    @Mapping(source = "roles.roleId", target = "roleId")
+    @Mapping(source = "roles.roleName", target = "roleId")
     UserDto userToUserDto(User user);
-
-//    @InheritConfiguration(name = "userDtoToUser")
-//    UserDto userToUserDto(User user);
 
 }

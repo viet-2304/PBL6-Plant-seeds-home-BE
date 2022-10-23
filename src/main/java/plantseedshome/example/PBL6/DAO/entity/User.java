@@ -23,17 +23,18 @@ public class User {
     @Column(name= "email", nullable = false)
     private String email;
 
-    @Column(name= "phone_number")
-    private String phoneNumber;
 
-    @Column(name= "address")
-    private String address;
 
     @Column(name= "user_name")
     private String userName;
 
     @Column(name= "password")
     private String password;
+    @Column(name= "phone_number")
+    private String phoneNumber;
+
+    @Column(name= "address")
+    private String address;
 
     @ManyToOne()
     @JoinColumn(name= "role_id")
