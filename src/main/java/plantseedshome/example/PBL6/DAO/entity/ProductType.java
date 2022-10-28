@@ -1,8 +1,6 @@
 package plantseedshome.example.PBL6.DAO.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,6 +10,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "product_type")
+@Getter
+@Setter
+
 public class ProductType {
 
     @Id
@@ -23,6 +24,4 @@ public class ProductType {
     @Column(name = "name")
     private String Name;
 
-    @OneToOne(mappedBy = "productType", cascade = CascadeType.ALL)
-    private Products products;
 }

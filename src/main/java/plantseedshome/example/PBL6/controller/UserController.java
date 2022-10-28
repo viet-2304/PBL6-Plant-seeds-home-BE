@@ -16,7 +16,7 @@ import plantseedshome.example.PBL6.dto.UserDto;
 import plantseedshome.example.PBL6.dto.UserRegisterDto;
 
 import java.util.*;
-
+@CrossOrigin
 @RestController
 @RequestMapping( value="api/v1/users")
 public class UserController {
@@ -37,12 +37,12 @@ public class UserController {
        if(res == "error") {
            return new ResponseEntity<>("Email is exist", HttpStatus.EXPECTATION_FAILED);
        }
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return new ResponseEntity<>("Create success", HttpStatus.OK);
     }
 
     @GetMapping("/getAll")
-    public List<User> getUser() {
-        List<User> tempUsers = userRepository.findAll();
+    public List<UserDto> getUser() {
+        List<UserDto> tempUsers = userService.getAllUser();
 //        List<UserDto> tempUsersDto = new List<UserDto>() ;
 //        for (User temp:tempUsers
 //             ) {

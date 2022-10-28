@@ -1,8 +1,6 @@
 package plantseedshome.example.PBL6.DAO.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,10 +8,11 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Data
+@Table(name = "products")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "products")
+@Getter
+@Setter
 public class Products {
     @Id
     @GeneratedValue(generator="system-uuid")
