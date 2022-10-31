@@ -4,14 +4,14 @@ package plantseedshome.example.PBL6.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
-import plantseedshome.example.PBL6.DAO.entity.User;
 import plantseedshome.example.PBL6.DAO.repository.UserRepository;
+import plantseedshome.example.PBL6.Security.CustomerUserDetails;
 import plantseedshome.example.PBL6.Services.LoginService;
 import plantseedshome.example.PBL6.Services.UserService;
-import plantseedshome.example.PBL6.Services.impl.LoginServiceImpl;
-import plantseedshome.example.PBL6.dto.LoginRequestDto;
 import plantseedshome.example.PBL6.dto.UserDto;
 import plantseedshome.example.PBL6.dto.UserRegisterDto;
 
@@ -31,6 +31,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    CustomerUserDetails customerUserDetails;
     @PostMapping("/createUser")
     public ResponseEntity<String> createUser(@RequestBody UserRegisterDto userRegisterDto) {
        String res =  userService.createUser(userRegisterDto);
@@ -40,21 +41,21 @@ public class UserController {
         return new ResponseEntity<>("Create success", HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','ROOT')")
     @GetMapping("/getAll")
-    public List<UserDto> getUser() {
+    public ResponseEntity<List<UserDto>> getUser() {
         List<UserDto> tempUsers = userService.getAllUser();
-//        List<UserDto> tempUsersDto = new List<UserDto>() ;
-//        for (User temp:tempUsers
-//             ) {
-//            UserDto tempDto = null;
-//            tempDto.setId(tempDto.getId());
-//            tempDto.setUserName(temp.getUserName());
-//            tempDto.setRoleName(temp.getRoles().getRoleName());
-//            tempDto.setAddress(temp.getAddress());
-//            tempDto.setEmail(temp.getEmail());
-//            tempDto.setImageAvatar("temp.getImageAvatar().getAvatarUrl()");
-//            tempDto.setPhoneNumber(temp.getPhoneNumber());
-//            tempUsersDto.add(tempDto);
-//        }
-        return tempUsers;    }
+        return new ResponseEntity<>(tempUsers, HttpStatus.OK);    }
+
+    @GetMapping("/getCurrentUser")
+    public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
+      return  new ResponseEntity<>(userService.getCurrentUser(authentication.getName()), HttpStatus.OK);
+    }
+
+    @PostMapping("/editUser")
+    public ResponseEntity<String> editUser(@RequestBody UserDto userDto) {
+
+        userService.editCurrentUser(userDto);
+        return new ResponseEntity<>("create success",HttpStatus.OK);
+    }
 }

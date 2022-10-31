@@ -22,7 +22,4 @@ public class Roles {
 
     @Column(name = "role_name")
     private String roleName;
-
-    @OneToMany(mappedBy = "roles", cascade = CascadeType.ALL)
-    private Collection<User> user;
 }

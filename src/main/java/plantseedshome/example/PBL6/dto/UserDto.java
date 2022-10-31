@@ -16,6 +16,5 @@ public class UserDto {
     private String address;
     private String userName;
     private String imageAvatar;
-    private String password;
     private String roleId;
 }

@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.Services.ProductService;
 import plantseedshome.example.PBL6.dto.ProductDto;
@@ -30,6 +32,23 @@ public class ProductController {
         System.out.print(id);
         ProductDto productDto= productService.findProductById(id);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/getProductWithType")
+    public ResponseEntity<List<ProductDto>> getProductWithType(@RequestParam String type) {
+       List<ProductDto> productDto = productService.findProductByType(type);
+        if (productDto != null) {
+            return  new ResponseEntity<>(productDto, HttpStatus.OK);
+        }
+        else {
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found");
+        }
+    }
+
+    @GetMapping("/getAllProductType")
+    public ResponseEntity<List<ProductType>> getAllProducType() {
+    List<ProductType> productTypes = productService.getAllProductType();
+        return new ResponseEntity<>(productTypes, HttpStatus.OK);
     }
 
 //    @GetMapping()

@@ -35,13 +35,24 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public LoginResponseDto authenticate(LoginRequestDto loginRequestDto) {
+        try {
+            customAuthenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequestDto.getEmail().trim(),
+                            loginRequestDto.getPassword()
+                    )
+
+            );
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Incorrect email or password.", e);
+        }
+
         final User user = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("Incorrect email or password."));
-    if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword()) == true){
+    if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
         final UserDetails userDetails = customerUserDetailsService.loadUserByUsername(loginRequestDto.getEmail().trim());
         final String token = jwtUtil.generateToken(userDetails);
         UserDto userDto = userMapper.userToUserDto(user);
-        userDto.setPassword("");
         userDto.setId("");
         return  new LoginResponseDto(token, userDto);
     }
