@@ -7,7 +7,7 @@ public class SecurityConstant {
     public static final String HEADER_NAME = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String LOGIN_PATH = "/api/v1/auth/login";
-    public static final String REGISTER_PATH = "/api/v1/users/*";
+    public static final String REGISTER_PATH = "/api/v1/users/createUser";
 
     public static final String GET_ALL_PRODUCT = "/api/v1/product/*";
     public static final String VERIFICATION_EMAIL = "/api/v1/users/verify";

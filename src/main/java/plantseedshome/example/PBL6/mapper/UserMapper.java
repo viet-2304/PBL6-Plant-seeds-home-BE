@@ -1,6 +1,5 @@
 package plantseedshome.example.PBL6.mapper;
 
-import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import plantseedshome.example.PBL6.DAO.entity.User;
@@ -9,6 +8,7 @@ import plantseedshome.example.PBL6.dto.UserRegisterDto;
 
 @Mapper
 public interface UserMapper {
+    @Mapping(source = "roleId",  target = "roles.roleId")
     User userDtoToUser(UserDto userDto);
 
     @Mapping(source = "roleId", target = "roles.roleId")

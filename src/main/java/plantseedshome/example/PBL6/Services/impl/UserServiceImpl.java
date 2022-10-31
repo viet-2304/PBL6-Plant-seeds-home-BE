@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUser() {
-        return null;
+     return   userRepository.findAll().stream().map(user -> userMapper.userToUserDto(user)).collect(Collectors.toList());
     }
 
     @Override
@@ -44,5 +44,24 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserDto getCurrentUser(String email) {
+       return userMapper.userToUserDto(userRepository.findByEmail(email).get());
+    }
 
+    @Override
+    public void editCurrentUser(UserDto userDto) {
+        if(userRepository.findById(userDto.getId()).isPresent()) {
+            User user = userRepository.findById(userDto.getId()).get();
+    user.setUserName(userDto.getUserName());
+    user.setAddress(userDto.getAddress());
+    user.setEmail(userDto.getEmail());
+    user.setPhoneNumber(userDto.getPhoneNumber());
+            userRepository.save(user);
+
+
+        }
+//        userRepository.save(userMapper.userDtoToUser(userDto));
+
+    }
 }

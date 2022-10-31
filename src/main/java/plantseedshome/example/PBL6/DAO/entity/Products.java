@@ -55,8 +55,6 @@ public class Products {
     @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
     private Collection<OrderDetails> orderDetails;
 
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
-    private Collection<ImagesProduct> imagesProducts;
 
     @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
     private Collection<Comments> comments;
