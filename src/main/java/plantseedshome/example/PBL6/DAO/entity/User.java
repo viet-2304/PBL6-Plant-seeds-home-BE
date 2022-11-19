@@ -46,6 +46,4 @@ public class User {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private Collection<OrderDetails> orderDetails;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private Collection<Carts>carts;
 }
