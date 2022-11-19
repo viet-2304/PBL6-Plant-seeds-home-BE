@@ -25,7 +25,12 @@ public class CartServiceImpl implements CartService {
       return  cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
     }
 
-//    @Override
+    @Override
+    public CartDto getCartWithId(String id) {
+        return cartMapper.cartToCartDto(cartRepository.findById(id).get());
+    }
+
+    //    @Override
 //    public void createCart(CartDto cartDto) {
 //        cartRepository.save(cartMapper.cartDtoToCart(cartDto));
 //    }
