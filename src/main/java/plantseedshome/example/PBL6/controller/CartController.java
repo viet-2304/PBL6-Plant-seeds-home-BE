@@ -48,6 +48,12 @@ public class CartController {
         cartService.updateProductInCart(cartDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/deleteProductInCart")
+    public ResponseEntity<String> deleteProductInCart(@RequestParam String id) {
+    cartService.deleteProductInCart(id);
+    return new ResponseEntity<>(HttpStatus.OK);
+    }
 //    @PostMapping("/createCart")
 //    public ResponseEntity<String> createCart(@RequestBody CartDto cartDto) {
 //        cartService.createCart(cartDto);

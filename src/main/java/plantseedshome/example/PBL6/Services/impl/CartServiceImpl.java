@@ -58,4 +58,9 @@ public class CartServiceImpl implements CartService {
     public void updateProductInCart(CartDto cartDto) {
         cartRepository.updateProductInCart(cartDto.number, cartDto.id);
     }
+
+    @Override
+    public void deleteProductInCart(String id) {
+        cartRepository.deleteById(id);
+    }
 }
