@@ -13,6 +13,6 @@ public interface CartService {
 //    void createCart(CartDto cartDto);
 //    void deleteProductInCart(CartDto cartDto);
     void addProductToCart(CartDto cartDto);
-//    void updateProductInCart(CartDto cartDto);
+    void updateProductInCart(CartDto cartDto);
 
 }

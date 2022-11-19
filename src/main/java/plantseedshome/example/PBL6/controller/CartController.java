@@ -42,6 +42,12 @@ public class CartController {
         cartService.addProductToCart(cartDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/editCart")
+    public ResponseEntity<String> updateNumberOfProduct(@RequestBody CartDto cartDto) {
+        cartService.updateProductInCart(cartDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 //    @PostMapping("/createCart")
 //    public ResponseEntity<String> createCart(@RequestBody CartDto cartDto) {
 //        cartService.createCart(cartDto);

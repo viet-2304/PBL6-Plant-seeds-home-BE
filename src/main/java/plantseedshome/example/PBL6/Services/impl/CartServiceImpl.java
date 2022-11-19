@@ -54,8 +54,8 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cartMapper.cartDtoToCart(cartDto));
     }
 //
-//    @Override
-//    public void updateProductInCart(CartDto cartDto) {
-//
-//    }
+    @Override
+    public void updateProductInCart(CartDto cartDto) {
+        cartRepository.updateProductInCart(cartDto.number, cartDto.id);
+    }
 }
