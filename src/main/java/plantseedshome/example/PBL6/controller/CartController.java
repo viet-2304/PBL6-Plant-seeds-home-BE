@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import plantseedshome.example.PBL6.Services.CartService;
@@ -20,7 +21,8 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/getAll")
+@PreAuthorize("hasAnyAuthority('ADMIN','ROOT')")
+@GetMapping("/getAll")
     public ResponseEntity<List<CartDto>> getAllCart() {
        return new ResponseEntity<>(cartService.getAllCart(), HttpStatus.OK) ;
     }
@@ -33,6 +35,12 @@ public class CartController {
     @GetMapping("/getCartDetail")
     public ResponseEntity<List<CartDto>> getCartWithUserId(@RequestBody CartDto cartDto) {
         return new ResponseEntity<>(cartService.getCartWithUserId(cartDto),HttpStatus.OK);
+    }
+
+    @PostMapping("/addToCart")
+    public ResponseEntity<String> addNewProductToCart(@RequestBody CartDto cartDto) {
+        cartService.addProductToCart(cartDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 //    @PostMapping("/createCart")
 //    public ResponseEntity<String> createCart(@RequestBody CartDto cartDto) {

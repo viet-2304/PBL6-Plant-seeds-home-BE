@@ -49,10 +49,10 @@ public class CartServiceImpl implements CartService {
 //    public void deleteProductInCart(CartDto cartDto) {
 //    }
 //
-//    @Override
-//    public void addProductToCart(CartDto cartDto) {
-//
-//    }
+    @Override
+    public void addProductToCart(CartDto cartDto) {
+        cartRepository.save(cartMapper.cartDtoToCart(cartDto));
+    }
 //
 //    @Override
 //    public void updateProductInCart(CartDto cartDto) {
