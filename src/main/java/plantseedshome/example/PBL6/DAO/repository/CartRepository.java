@@ -14,6 +14,9 @@ public interface CartRepository extends JpaRepository<Carts, String> {
 //    Optional<List<Carts>> findAllByUserId(String userId);
 
     Optional<Carts> findById(String id);
+
+    @Query("select c from Carts c where c.users.id= :users")
+    Optional<List<Carts>> findByUserId(@Param("users") String users);
 //
 //    void deleteById(String id);
 

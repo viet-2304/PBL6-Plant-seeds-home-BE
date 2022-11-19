@@ -29,6 +29,11 @@ public class CartController {
     public ResponseEntity<CartDto> getCartWithId(@RequestParam String id) {
         return new ResponseEntity<>(cartService.getCartWithId(id), HttpStatus.OK);
     }
+
+    @GetMapping("/getCartDetail")
+    public ResponseEntity<List<CartDto>> getCartWithUserId(@RequestBody CartDto cartDto) {
+        return new ResponseEntity<>(cartService.getCartWithUserId(cartDto),HttpStatus.OK);
+    }
 //    @PostMapping("/createCart")
 //    public ResponseEntity<String> createCart(@RequestBody CartDto cartDto) {
 //        cartService.createCart(cartDto);
