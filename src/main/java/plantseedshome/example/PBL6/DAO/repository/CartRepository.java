@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Carts, String> {
-//    Optional<List<Carts>> findAllByUserId(String userId);
 
     Optional<Carts> findById(String id);
 
@@ -24,10 +23,5 @@ public interface CartRepository extends JpaRepository<Carts, String> {
     @Transactional
     @Query("update Carts c set c.numberOfProduct = ?1 where c.id = ?2 ")
     void updateProductInCart(String numberOfProduct, String id);
-
-//
-//    void deleteById(String id);
-
-
 
 }

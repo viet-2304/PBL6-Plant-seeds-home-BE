@@ -8,10 +8,6 @@ public interface CartService {
     List<CartDto> getAllCart();
     CartDto getCartWithId(String id);
     List<CartDto> getCartWithUserId(CartDto cartDto);
-
-//    List<CartDto> getCartWithUserId(String userId);
-//    void createCart(CartDto cartDto);
-//    void deleteProductInCart(CartDto cartDto);
     void addProductToCart(CartDto cartDto);
     void updateProductInCart(CartDto cartDto);
     void deleteProductInCart(String id);

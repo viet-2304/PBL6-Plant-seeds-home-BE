@@ -21,8 +21,8 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-@PreAuthorize("hasAnyAuthority('ADMIN','ROOT')")
-@GetMapping("/getAll")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ROOT')")
+    @GetMapping("/getAll")
     public ResponseEntity<List<CartDto>> getAllCart() {
        return new ResponseEntity<>(cartService.getAllCart(), HttpStatus.OK) ;
     }
@@ -51,15 +51,8 @@ public class CartController {
 
     @PostMapping("/deleteProductInCart")
     public ResponseEntity<String> deleteProductInCart(@RequestParam String id) {
-    cartService.deleteProductInCart(id);
-    return new ResponseEntity<>(HttpStatus.OK);
+        cartService.deleteProductInCart(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-//    @PostMapping("/createCart")
-//    public ResponseEntity<String> createCart(@RequestBody CartDto cartDto) {
-//        cartService.createCart(cartDto);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
-
 
 }
