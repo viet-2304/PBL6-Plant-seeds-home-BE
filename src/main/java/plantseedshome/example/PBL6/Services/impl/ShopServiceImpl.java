@@ -21,4 +21,9 @@ public class ShopServiceImpl implements ShopService {
     public List<ShopDto> getAllShop() {
        return shopRepository.findAll().stream().map(shops -> shopMapper.shopToShopDto(shops)).collect(Collectors.toList());
     }
+
+    @Override
+    public ShopDto findByUserId(String userId) {
+        return shopMapper.shopToShopDto(shopRepository.findShopsByUserId(userId));
+    }
 }

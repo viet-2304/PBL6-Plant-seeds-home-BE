@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ShopService {
     List<ShopDto> getAllShop();
+    ShopDto findByUserId(String userId);
 }

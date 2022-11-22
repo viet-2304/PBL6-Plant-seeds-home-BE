@@ -8,6 +8,6 @@ import plantseedshome.example.PBL6.DAO.entity.Shops;
 @Repository
 public interface ShopRepository extends JpaRepository<Shops, String> {
 
-//    @Query("select s from Shops s where s.users = ?1")
-//    Shops findShopsByUserId(String userId);
+    @Query("select s from Shops s where s.users.id = ?1")
+    Shops findShopsByUserId(String userId);
 }

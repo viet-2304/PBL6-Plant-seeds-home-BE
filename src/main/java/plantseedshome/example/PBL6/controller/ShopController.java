@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import plantseedshome.example.PBL6.Services.ShopService;
 import plantseedshome.example.PBL6.dto.ShopDto;
 
@@ -22,5 +23,10 @@ public class ShopController {
     @GetMapping("/getAllShop")
     public ResponseEntity<List<ShopDto>> getAllShop() {
         return new ResponseEntity<>(shopService.getAllShop(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getShopByUser")
+    public ResponseEntity<ShopDto> getShopByUserId(@RequestParam String userId) {
+        return new ResponseEntity<>(shopService.findByUserId(userId), HttpStatus.OK);
     }
 }
