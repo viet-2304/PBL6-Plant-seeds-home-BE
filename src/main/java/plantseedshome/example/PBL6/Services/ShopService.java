@@ -9,4 +9,5 @@ public interface ShopService {
     ShopDto findByUserId(String userId);
     List<ShopDto> findShopByShopName(String shopName);
     void addNewShop(ShopDto shopDto);
+    void editShop(ShopDto shopDto);
 }

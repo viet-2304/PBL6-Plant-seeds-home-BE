@@ -37,4 +37,10 @@ public class ShopController {
         shopService.addNewShop(shopDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/updateShop")
+    public ResponseEntity<String> updateShop(@RequestBody ShopDto shopDto) {
+        shopService.editShop(shopDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -38,4 +38,10 @@ public class ShopServiceImpl implements ShopService {
         Shops shops = shopMapper.shopDtoToShop(shopDto);
         shopRepository.save(shops);
     }
+
+    @Override
+    public void editShop(ShopDto shopDto) {
+        Shops shops = shopMapper.shopDtoToShop(shopDto);
+        shopRepository.editShop(shops.getShopId(), shops.getShopName(), shops.getAddress(), shops.getPhoneNumber(),shops.getEmail());
+    }
 }
