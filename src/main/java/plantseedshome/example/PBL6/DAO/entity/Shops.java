@@ -39,9 +39,4 @@ public class Shops {
     @JoinColumn(name = "user_id")
     private User users;
 
-    @OneToOne(mappedBy = "shops", cascade = CascadeType.ALL)
-    private ImageAvatar imageAvatar;
-
-    @OneToMany(mappedBy = "shops", cascade = CascadeType.ALL)
-    private Collection<Products> products;
 }
