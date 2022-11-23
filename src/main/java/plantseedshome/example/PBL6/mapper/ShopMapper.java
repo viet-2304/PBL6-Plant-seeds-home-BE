@@ -12,4 +12,10 @@ public interface ShopMapper {
     @Mapping(source = "shopName", target = "shopName")
     @Mapping(source = "shopId", target = "shopId")
     ShopDto shopToShopDto(Shops shops);
+
+
+    @Mapping(source = "userId", target = "users.id")
+    @Mapping(source = "shopName", target = "shopName")
+    @Mapping(source = "shopId", target = "shopId")
+    Shops shopDtoToShop(ShopDto shopDto);
 }

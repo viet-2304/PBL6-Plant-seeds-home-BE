@@ -7,4 +7,6 @@ import java.util.List;
 public interface ShopService {
     List<ShopDto> getAllShop();
     ShopDto findByUserId(String userId);
+    List<ShopDto> findShopByShopName(String shopName);
+    void addNewShop(ShopDto shopDto);
 }
