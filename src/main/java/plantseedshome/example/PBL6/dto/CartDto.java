@@ -16,5 +16,6 @@ public class CartDto {
     public String number;
     public String userId;
     public String productId;
+    public ProductDto products;
 
 }
