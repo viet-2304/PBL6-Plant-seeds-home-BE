@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import plantseedshome.example.PBL6.Services.CartService;
 import plantseedshome.example.PBL6.dto.CartDto;
+import plantseedshome.example.PBL6.dto.CartResponseDto;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class CartController {
     }
 
     @GetMapping("")
-    public ResponseEntity<CartDto> getCartWithId(@RequestParam String id) {
+    public ResponseEntity<CartResponseDto> getCartWithId(@RequestParam String id) {
         return new ResponseEntity<>(cartService.getCartWithId(id), HttpStatus.OK);
     }
 
