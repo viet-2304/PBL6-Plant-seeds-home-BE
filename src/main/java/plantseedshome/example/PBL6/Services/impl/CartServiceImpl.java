@@ -3,9 +3,12 @@ package plantseedshome.example.PBL6.Services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import plantseedshome.example.PBL6.DAO.entity.Carts;
 import plantseedshome.example.PBL6.DAO.repository.CartRepository;
 import plantseedshome.example.PBL6.Services.CartService;
+import plantseedshome.example.PBL6.Services.ProductService;
 import plantseedshome.example.PBL6.dto.CartDto;
+import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.mapper.CartMapper;
 
 import java.util.List;
@@ -18,6 +21,9 @@ public class CartServiceImpl implements CartService {
     CartRepository cartRepository;
 
     @Autowired
+    ProductService productService;
+
+    @Autowired
     CartMapper cartMapper;
 
     @Override
@@ -27,12 +33,16 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDto getCartWithId(String id) {
-        return cartMapper.cartToCartDto(cartRepository.findById(id).get());
+        Carts carts =  cartRepository.findById(id).get();
+        ProductDto productDto = productService.findProductById(carts.getProducts().getProductId());
+        CartDto cartDto = cartMapper.cartToCartDto(carts);
+        cartDto.products = productDto;
+        return cartDto;
     }
 
     @Override
-    public List<CartDto> getCartWithUserId(CartDto cartDto) {
-    return  cartRepository.findByUserId(cartDto.userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
+    public List<CartDto> getCartWithUserId(String userId) {
+    return  cartRepository.findByUserId(userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
     }
 
     @Override
