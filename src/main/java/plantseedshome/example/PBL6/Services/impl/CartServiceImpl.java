@@ -8,6 +8,9 @@ import plantseedshome.example.PBL6.DAO.repository.CartRepository;
 import plantseedshome.example.PBL6.Services.CartService;
 import plantseedshome.example.PBL6.Services.ProductService;
 import plantseedshome.example.PBL6.dto.CartDto;
+
+import plantseedshome.example.PBL6.dto.CartResponseDto;
+
 import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.mapper.CartMapper;
 
@@ -32,12 +35,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDto getCartWithId(String id) {
+    public CartResponseDto getCartWithId(String id) {
         Carts carts =  cartRepository.findById(id).get();
         ProductDto productDto = productService.findProductById(carts.getProducts().getProductId());
         CartDto cartDto = cartMapper.cartToCartDto(carts);
-        cartDto.products = productDto;
-        return cartDto;
+        CartResponseDto cartResponseDto = new CartResponseDto(cartDto,productDto);
+
+        return cartResponseDto;
     }
 
     @Override
