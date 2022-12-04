@@ -33,8 +33,8 @@ public class CartController {
     }
 
     @GetMapping("/getCartDetail")
-    public ResponseEntity<List<CartDto>> getCartWithUserId(@RequestBody CartDto cartDto) {
-        return new ResponseEntity<>(cartService.getCartWithUserId(cartDto),HttpStatus.OK);
+    public ResponseEntity<List<CartDto>> getCartWithUserId(@RequestBody String userId) {
+        return new ResponseEntity<>(cartService.getCartWithUserId(userId),HttpStatus.OK);
     }
 
     @PostMapping("/addToCart")
