@@ -63,7 +63,15 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void addProductToCart(CartDto cartDto) {
-        cartRepository.save(cartMapper.cartDtoToCart(cartDto));
+        Carts carts = cartRepository.findByUserAndProduct(cartDto.userId, cartDto.productId).get();
+        if(carts != null) {
+            cartRepository.updateProductInCart((Integer.parseInt(cartDto.number) +Integer.parseInt(carts.getNumberOfProduct())) + "", carts.getId());
+
+        }
+        else {
+            cartRepository.save(cartMapper.cartDtoToCart(cartDto));
+
+        }
     }
 
     @Override
