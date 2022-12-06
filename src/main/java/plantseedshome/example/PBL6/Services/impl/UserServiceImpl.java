@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import plantseedshome.example.PBL6.DAO.entity.User;
+import plantseedshome.example.PBL6.DAO.repository.RoleRepository;
 import plantseedshome.example.PBL6.DAO.repository.UserRepository;
 import plantseedshome.example.PBL6.Services.UserService;
 import plantseedshome.example.PBL6.dto.UserDto;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    RoleRepository roleRepository;
 
 
     @Override
@@ -63,5 +67,14 @@ public class UserServiceImpl implements UserService {
         }
 //        userRepository.save(userMapper.userDtoToUser(userDto));
 
+    }
+
+    @Override
+    public void updateUserRole(String userId,String role) {
+        if(userRepository.findById(userId).isPresent()) {
+            User user =userRepository.findById(userId).get();
+            user.setRoles(roleRepository.getReferenceById(role));
+            userRepository.save(user);
+        }
     }
 }
