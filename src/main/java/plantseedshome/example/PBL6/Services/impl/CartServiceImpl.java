@@ -49,15 +49,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public ProductResponseWithUserIdDto getCartWithUserId(String userId) {
         List<ProductAndNumberDto> productAndNumberDtoList = new ArrayList<>();
-        System.out.println(userId);
-        System.out.println(cartRepository.findByUserId(userId));
     List<CartDto> listCartDto =  cartRepository.findByUserId(userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
     if (listCartDto.isEmpty()) {
         return null;
     }
     listCartDto.forEach(cartDto -> {
         productAndNumberDtoList.add(
-                new ProductAndNumberDto(cartDto.number, productService.findProductById(cartDto.productId))
+                new ProductAndNumberDto(cartDto.number, cartDto.id ,productService.findProductById(cartDto.productId))
                 );
     });
     return new ProductResponseWithUserIdDto(userId, productAndNumberDtoList);

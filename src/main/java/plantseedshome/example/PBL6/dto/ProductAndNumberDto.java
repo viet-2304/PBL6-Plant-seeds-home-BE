@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductAndNumberDto {
     public String numberOfProductInCart;
+    public String cartId;
     public ProductDto productDto;
 }
