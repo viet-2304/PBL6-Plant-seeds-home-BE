@@ -2,12 +2,13 @@ package plantseedshome.example.PBL6.Services;
 
 import plantseedshome.example.PBL6.dto.CartDto;
 import plantseedshome.example.PBL6.dto.CartResponseDto;
+import plantseedshome.example.PBL6.dto.ProductAndNumberDto;
 import plantseedshome.example.PBL6.dto.ProductResponseWithUserIdDto;
 
 import java.util.List;
 
 public interface CartService {
-    List<CartResponseDto> getAllCart();
+    List<ProductAndNumberDto> getAllCart();
     CartResponseDto getCartWithId(String id);
     ProductResponseWithUserIdDto getCartWithUserId(String userId);
     void addProductToCart(CartDto cartDto);
