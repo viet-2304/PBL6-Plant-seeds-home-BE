@@ -12,5 +12,11 @@ import lombok.Setter;
 public class ProductAndNumberDto {
     public String numberOfProductInCart;
     public String cartId;
-    public ProductDto productDto;
+//    public ProductDto productDto;
+    public String productId;
+    public String productName;
+    public String price;
+    public String imageProduct;
+    public String manufacturer;
+    public String description;
 }

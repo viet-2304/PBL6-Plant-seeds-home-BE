@@ -32,7 +32,17 @@ public class CartServiceImpl implements CartService {
         List<ProductAndNumberDto> cartResponseDtos = new ArrayList<>();
       List<CartDto> cartDtos = cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
       cartDtos.forEach(cartDto -> {
-          cartResponseDtos.add(new ProductAndNumberDto(cartDto.id, cartDto.number, productService.findProductById(cartDto.productId)));
+          ProductDto productDto = productService.findProductById(cartDto.productId);
+          cartResponseDtos.add(
+                  new ProductAndNumberDto(
+                          cartDto.number,
+                          cartDto.id,
+                          productDto.getProductId(),
+                          productDto.getProductName(),
+                          productDto.getPrice() + "",
+                          productDto.getImageURL() + "",
+                          productDto.getManufacturer(),
+                          productDto.getDescription()));
       });
       return cartResponseDtos;
     }
@@ -54,8 +64,15 @@ public class CartServiceImpl implements CartService {
         return null;
     }
     listCartDto.forEach(cartDto -> {
+        ProductDto productDto = productService.findProductById(cartDto.productId);
+
         productAndNumberDtoList.add(
-                new ProductAndNumberDto(cartDto.number, cartDto.id ,productService.findProductById(cartDto.productId))
+                new ProductAndNumberDto(cartDto.number, cartDto.id ,productDto.getProductId(),
+                        productDto.getProductName(),
+                        productDto.getPrice() + "",
+                        productDto.getImageURL() + "",
+                        productDto.getManufacturer(),
+                        productDto.getDescription())
                 );
     });
     return new ProductResponseWithUserIdDto(userId, productAndNumberDtoList);
