@@ -1,6 +1,5 @@
 package plantseedshome.example.PBL6.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartResponseDto {
-    public String cartId;
-    public String numberOfProduct;
-    public ProductDto product;
-
+public class ProductResponseWithUserIdDto {
+    public String userId;
+    public List<ProductAndNumberDto> listProduct;
 }

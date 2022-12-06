@@ -16,8 +16,8 @@ public interface CartRepository extends JpaRepository<Carts, String> {
 
     Optional<Carts> findById(String id);
 
-    @Query("select c from Carts c where c.users.id= :users")
-    Optional<List<Carts>> findByUserId(@Param("users") String users);
+    @Query("select c from Carts c where c.users.id= :userId")
+    Optional<List<Carts>> findByUserId(@Param("userId") String userId);
 
     @Modifying
     @Transactional

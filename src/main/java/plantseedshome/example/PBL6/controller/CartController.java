@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import plantseedshome.example.PBL6.Services.CartService;
 import plantseedshome.example.PBL6.dto.CartDto;
 import plantseedshome.example.PBL6.dto.CartResponseDto;
+import plantseedshome.example.PBL6.dto.ProductResponseWithUserIdDto;
 
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','ROOT')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/getAll")
-    public ResponseEntity<List<CartDto>> getAllCart() {
+    public ResponseEntity<List<CartResponseDto>> getAllCart() {
        return new ResponseEntity<>(cartService.getAllCart(), HttpStatus.OK) ;
     }
 
@@ -34,7 +35,7 @@ public class CartController {
     }
 
     @GetMapping("/getCartDetail")
-    public ResponseEntity<List<CartDto>> getCartWithUserId(@RequestBody String userId) {
+    public ResponseEntity<ProductResponseWithUserIdDto> getCartWithUserId(@RequestParam String userId) {
         return new ResponseEntity<>(cartService.getCartWithUserId(userId),HttpStatus.OK);
     }
 
