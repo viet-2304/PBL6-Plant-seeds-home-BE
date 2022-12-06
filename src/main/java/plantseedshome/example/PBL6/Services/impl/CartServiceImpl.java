@@ -28,11 +28,11 @@ public class CartServiceImpl implements CartService {
     CartMapper cartMapper;
 
     @Override
-    public List<CartResponseDto> getAllCart() {
-        List<CartResponseDto> cartResponseDtos = new ArrayList<>();
+    public List<ProductAndNumberDto> getAllCart() {
+        List<ProductAndNumberDto> cartResponseDtos = new ArrayList<>();
       List<CartDto> cartDtos = cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
       cartDtos.forEach(cartDto -> {
-          cartResponseDtos.add(new CartResponseDto(cartDto.id, cartDto.number, productService.findProductById(cartDto.productId)));
+          cartResponseDtos.add(new ProductAndNumberDto(cartDto.id, cartDto.number, productService.findProductById(cartDto.productId)));
       });
       return cartResponseDtos;
     }
@@ -49,15 +49,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public ProductResponseWithUserIdDto getCartWithUserId(String userId) {
         List<ProductAndNumberDto> productAndNumberDtoList = new ArrayList<>();
-        System.out.println(userId);
-        System.out.println(cartRepository.findByUserId(userId));
     List<CartDto> listCartDto =  cartRepository.findByUserId(userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
     if (listCartDto.isEmpty()) {
         return null;
     }
     listCartDto.forEach(cartDto -> {
         productAndNumberDtoList.add(
-                new ProductAndNumberDto(cartDto.number, productService.findProductById(cartDto.productId))
+                new ProductAndNumberDto(cartDto.number, cartDto.id ,productService.findProductById(cartDto.productId))
                 );
     });
     return new ProductResponseWithUserIdDto(userId, productAndNumberDtoList);
@@ -65,7 +63,15 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void addProductToCart(CartDto cartDto) {
-        cartRepository.save(cartMapper.cartDtoToCart(cartDto));
+        if(cartRepository.findByUserAndProduct(cartDto.userId, cartDto.productId).isPresent()) {
+            Carts carts = cartRepository.findByUserAndProduct(cartDto.userId, cartDto.productId).get();
+            cartRepository.updateProductInCart(
+                    (Integer.parseInt(cartDto.number) +
+                            Integer.parseInt(carts.getNumberOfProduct())) + "", carts.getId());
+        }
+        else {
+            cartRepository.save(cartMapper.cartDtoToCart(cartDto));
+        }
     }
 
     @Override

@@ -24,4 +24,7 @@ public interface CartRepository extends JpaRepository<Carts, String> {
     @Query("update Carts c set c.numberOfProduct = ?1 where c.id = ?2 ")
     void updateProductInCart(String numberOfProduct, String id);
 
+    @Query("select c from Carts c where c.users.id= ?1 and  c.products.productId = ?2")
+    Optional<Carts> findByUserAndProduct(String userId, String productId);
+
 }
