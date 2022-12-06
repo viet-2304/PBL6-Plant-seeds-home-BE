@@ -7,13 +7,11 @@ import plantseedshome.example.PBL6.DAO.entity.Carts;
 import plantseedshome.example.PBL6.DAO.repository.CartRepository;
 import plantseedshome.example.PBL6.Services.CartService;
 import plantseedshome.example.PBL6.Services.ProductService;
-import plantseedshome.example.PBL6.dto.CartDto;
+import plantseedshome.example.PBL6.dto.*;
 
-import plantseedshome.example.PBL6.dto.CartResponseDto;
-
-import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.mapper.CartMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,23 +28,39 @@ public class CartServiceImpl implements CartService {
     CartMapper cartMapper;
 
     @Override
-    public List<CartDto> getAllCart() {
-      return  cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
+    public List<CartResponseDto> getAllCart() {
+        List<CartResponseDto> cartResponseDtos = new ArrayList<>();
+      List<CartDto> cartDtos = cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
+      cartDtos.forEach(cartDto -> {
+          cartResponseDtos.add(new CartResponseDto(cartDto.id, cartDto.number, productService.findProductById(cartDto.productId)));
+      });
+      return cartResponseDtos;
     }
 
     @Override
     public CartResponseDto getCartWithId(String id) {
         Carts carts =  cartRepository.findById(id).get();
-        ProductDto productDto = productService.findProductById(carts.getProducts().getProductId());
         CartDto cartDto = cartMapper.cartToCartDto(carts);
-        CartResponseDto cartResponseDto = new CartResponseDto(cartDto,productDto);
+        CartResponseDto cartResponseDto = new CartResponseDto(cartDto.id, cartDto.number,productService.findProductById(carts.getProducts().getProductId()));
 
         return cartResponseDto;
     }
 
     @Override
-    public List<CartDto> getCartWithUserId(String userId) {
-    return  cartRepository.findByUserId(userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
+    public ProductResponseWithUserIdDto getCartWithUserId(String userId) {
+        List<ProductAndNumberDto> productAndNumberDtoList = new ArrayList<>();
+        System.out.println(userId);
+        System.out.println(cartRepository.findByUserId(userId));
+    List<CartDto> listCartDto =  cartRepository.findByUserId(userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
+    if (listCartDto.isEmpty()) {
+        return null;
+    }
+    listCartDto.forEach(cartDto -> {
+        productAndNumberDtoList.add(
+                new ProductAndNumberDto(cartDto.number, productService.findProductById(cartDto.productId))
+                );
+    });
+    return new ProductResponseWithUserIdDto(userId, productAndNumberDtoList);
     }
 
     @Override
