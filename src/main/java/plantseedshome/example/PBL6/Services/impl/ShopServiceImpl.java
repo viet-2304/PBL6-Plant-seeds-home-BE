@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import plantseedshome.example.PBL6.DAO.entity.Shops;
 import plantseedshome.example.PBL6.DAO.repository.ShopRepository;
 import plantseedshome.example.PBL6.Services.ShopService;
+import plantseedshome.example.PBL6.Services.UserService;
 import plantseedshome.example.PBL6.dto.ShopDto;
 import plantseedshome.example.PBL6.mapper.ShopMapper;
 
@@ -17,6 +18,8 @@ public class ShopServiceImpl implements ShopService {
     private final   ShopRepository shopRepository;
 
     private final ShopMapper shopMapper;
+
+    private final UserService userService;
 
     @Override
     public List<ShopDto> getAllShop() {
@@ -36,6 +39,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void addNewShop(ShopDto shopDto) {
         Shops shops = shopMapper.shopDtoToShop(shopDto);
+        userService.updateUserRole(shopDto.userId, "2");
         shopRepository.save(shops);
     }
 
