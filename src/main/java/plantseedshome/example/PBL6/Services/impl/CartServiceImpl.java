@@ -4,12 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plantseedshome.example.PBL6.DAO.entity.Carts;
+import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.DAO.repository.CartRepository;
+import plantseedshome.example.PBL6.DAO.repository.ImagesProductRepository;
+import plantseedshome.example.PBL6.DAO.repository.ProductRepository;
+import plantseedshome.example.PBL6.DAO.repository.ShopRepository;
 import plantseedshome.example.PBL6.Services.CartService;
 import plantseedshome.example.PBL6.Services.ProductService;
 import plantseedshome.example.PBL6.dto.*;
 
 import plantseedshome.example.PBL6.mapper.CartMapper;
+import plantseedshome.example.PBL6.mapper.ProductMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,22 +32,30 @@ public class CartServiceImpl implements CartService {
     @Autowired
     CartMapper cartMapper;
 
+    @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    ImagesProductRepository imagesProductRepository;
+
     @Override
     public List<ProductAndNumberDto> getAllCart() {
         List<ProductAndNumberDto> cartResponseDtos = new ArrayList<>();
       List<CartDto> cartDtos = cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
       cartDtos.forEach(cartDto -> {
-          ProductDto productDto = productService.findProductById(cartDto.productId);
+          Products products = productRepository.findById(cartDto.getProductId()).get();
           cartResponseDtos.add(
                   new ProductAndNumberDto(
                           cartDto.number,
                           cartDto.id,
-                          productDto.getProductId(),
-                          productDto.getProductName(),
-                          productDto.getPrice() + "",
-                          productDto.getImageURL() + "",
-                          productDto.getManufacturer(),
-                          productDto.getDescription()));
+                          products.getProductId(),
+                          products.getProductName(),
+                          products.getPrice() + "",
+                          imagesProductRepository.findImagesProductByProductId(products.getProductId()) +"",
+                          products.getShops().getShopId(),
+                          products.getShops().getShopName()
+                          )
+      );
       });
       return cartResponseDtos;
     }
@@ -64,16 +77,20 @@ public class CartServiceImpl implements CartService {
         return null;
     }
     listCartDto.forEach(cartDto -> {
-        ProductDto productDto = productService.findProductById(cartDto.productId);
-
+        Products products = productRepository.findById(
+                            cartDto.getProductId()).get();
         productAndNumberDtoList.add(
-                new ProductAndNumberDto(cartDto.number, cartDto.id ,productDto.getProductId(),
-                        productDto.getProductName(),
-                        productDto.getPrice() + "",
-                        productDto.getImageURL() + "",
-                        productDto.getManufacturer(),
-                        productDto.getDescription())
-                );
+                new ProductAndNumberDto(
+                        cartDto.number,
+                        cartDto.id,
+                        products.getProductId(),
+                        products.getProductName(),
+                        products.getPrice() + "",
+                        imagesProductRepository.findImagesProductByProductId(products.getProductId()) +"",
+                        products.getShops().getShopId(),
+                        products.getShops().getShopName()
+                )
+        );
     });
     return new ProductResponseWithUserIdDto(userId, productAndNumberDtoList);
     }
