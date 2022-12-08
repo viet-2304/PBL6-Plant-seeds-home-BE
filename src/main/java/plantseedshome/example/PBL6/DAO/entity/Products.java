@@ -53,10 +53,6 @@ public class Products {
     private ProductType productType;
 
     @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
-    private Collection<OrderDetails> orderDetails;
-
-
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
     private Collection<Comments> comments;
     
 }

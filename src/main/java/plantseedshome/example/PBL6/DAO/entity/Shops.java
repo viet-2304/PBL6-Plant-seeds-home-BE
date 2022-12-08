@@ -35,6 +35,9 @@ public class Shops {
     @Column(name = "facebook_address")
     private String facebook;
 
+    @Column(name = "is_delete")
+    private Boolean isDelete;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User users;

@@ -22,6 +22,4 @@ public class OrderStatus {
     @Column(name = "status_name")
     private String StatusName;
 
-    @OneToOne(mappedBy = "orderStatus", cascade = CascadeType.ALL)
-    private Orders order;
 }

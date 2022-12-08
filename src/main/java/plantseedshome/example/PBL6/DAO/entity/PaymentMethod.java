@@ -22,6 +22,4 @@ public class PaymentMethod {
     @Column(name = "payment_method_name")
     private String PaymentMethodName;
 
-    @OneToOne(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
-    private Orders order;
 }
