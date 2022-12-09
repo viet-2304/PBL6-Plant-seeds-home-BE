@@ -12,5 +12,5 @@ import java.util.List;
 public class ProductsWithShopDto {
     public String shopId;
     public String shopName;
-    public List<Object> listProductAndNumberDto;
+    public List<ProductAndNumberDto> listProductAndNumberDto;
 }

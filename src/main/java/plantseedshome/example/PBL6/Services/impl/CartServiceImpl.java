@@ -39,6 +39,9 @@ public class CartServiceImpl implements CartService {
     @Autowired
     ImagesProductRepository imagesProductRepository;
 
+    @Autowired
+    ShopRepository shopRepository;
+
     @Override
     public List<ProductAndNumberDto> getAllCart() {
       List<CartDto> cartDtos = cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
@@ -64,13 +67,12 @@ public class CartServiceImpl implements CartService {
         }
         List<ProductAndNumberDto> productAndNumberDtoList = getProductAndNumberForCartDto(listCartDto);
         List<ProductsWithShopDto> productsWithShopDtos = new ArrayList<>();
-        Map<Object,List<Object> > map = productAndNumberDtoList.stream().collect(Collectors.groupingBy(p -> p.shopId, Collectors.mapping(p-> p,Collectors.toList())));
-
+        Map<String,List<ProductAndNumberDto> > map = productAndNumberDtoList.stream().collect(Collectors.groupingBy(p -> p.shopId, Collectors.mapping(p-> p,Collectors.toList())));
 
         map.forEach((key,value) -> {
             ProductsWithShopDto products = new ProductsWithShopDto();
-            products.shopId = key.toString();
-            products.shopName = value.get(7).toString();
+            products.shopId = key;
+            products.shopName = value.get(0).getShopName();
             products.listProductAndNumberDto = value;
             productsWithShopDtos.add(products);
         });
