@@ -13,5 +13,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductResponseWithUserIdDto {
     public String userId;
-    public List<ProductAndNumberDto> listProduct;
+    public List<ProductsWithShopDto>  listProduct;
 }

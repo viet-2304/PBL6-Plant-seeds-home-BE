@@ -18,6 +18,7 @@ import plantseedshome.example.PBL6.mapper.ProductMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,24 +41,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<ProductAndNumberDto> getAllCart() {
-        List<ProductAndNumberDto> cartResponseDtos = new ArrayList<>();
       List<CartDto> cartDtos = cartRepository.findAll().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
-      cartDtos.forEach(cartDto -> {
-          Products products = productRepository.findById(cartDto.getProductId()).get();
-          cartResponseDtos.add(
-                  new ProductAndNumberDto(
-                          cartDto.number,
-                          cartDto.id,
-                          products.getProductId(),
-                          products.getProductName(),
-                          products.getPrice() + "",
-                          imagesProductRepository.findImagesProductByProductId(products.getProductId()) +"",
-                          products.getShops().getShopId(),
-                          products.getShops().getShopName()
-                          )
-      );
-      });
-      return cartResponseDtos;
+        List<ProductAndNumberDto> productAndNumberDtoList = getProductAndNumberForCartDto(cartDtos);
+
+        return productAndNumberDtoList;
     }
 
     @Override
@@ -71,28 +58,25 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ProductResponseWithUserIdDto getCartWithUserId(String userId) {
-        List<ProductAndNumberDto> productAndNumberDtoList = new ArrayList<>();
-    List<CartDto> listCartDto =  cartRepository.findByUserId(userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
-    if (listCartDto.isEmpty()) {
-        return null;
-    }
-    listCartDto.forEach(cartDto -> {
-        Products products = productRepository.findById(
-                            cartDto.getProductId()).get();
-        productAndNumberDtoList.add(
-                new ProductAndNumberDto(
-                        cartDto.number,
-                        cartDto.id,
-                        products.getProductId(),
-                        products.getProductName(),
-                        products.getPrice() + "",
-                        imagesProductRepository.findImagesProductByProductId(products.getProductId()) +"",
-                        products.getShops().getShopId(),
-                        products.getShops().getShopName()
-                )
-        );
-    });
-    return new ProductResponseWithUserIdDto(userId, productAndNumberDtoList);
+        List<CartDto> listCartDto =  cartRepository.findByUserId(userId).get().stream().map(carts -> cartMapper.cartToCartDto(carts)).collect(Collectors.toList());
+        if (listCartDto.isEmpty()) {
+            return null;
+        }
+        List<ProductAndNumberDto> productAndNumberDtoList = getProductAndNumberForCartDto(listCartDto);
+        List<ProductsWithShopDto> productsWithShopDtos = new ArrayList<>();
+        Map<Object,List<Object> > map = productAndNumberDtoList.stream().collect(Collectors.groupingBy(p -> p.shopId, Collectors.mapping(p-> p,Collectors.toList())));
+
+
+        map.forEach((key,value) -> {
+            ProductsWithShopDto products = new ProductsWithShopDto();
+            products.shopId = key.toString();
+            products.shopName = value.get(7).toString();
+            products.listProductAndNumberDto = value;
+            productsWithShopDtos.add(products);
+        });
+
+
+        return new ProductResponseWithUserIdDto(userId, productsWithShopDtos);
     }
 
     @Override
@@ -116,5 +100,26 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteProductInCart(String id) {
         cartRepository.deleteById(id);
+    }
+
+    private List<ProductAndNumberDto> getProductAndNumberForCartDto(List<CartDto> cartDtoList) {
+        List<ProductAndNumberDto> productAndNumberDtoList = new ArrayList<>();
+        cartDtoList.forEach(cartDto -> {
+            Products products = productRepository.findById(
+                    cartDto.getProductId()).get();
+            productAndNumberDtoList.add(
+                    new ProductAndNumberDto(
+                            cartDto.number,
+                            cartDto.id,
+                            products.getProductId(),
+                            products.getProductName(),
+                            products.getPrice() + "",
+                            imagesProductRepository.findImagesProductByProductId(products.getProductId()) +"",
+                            products.getShops().getShopId(),
+                            products.getShops().getShopName()
+                    )
+            );
+        });
+        return productAndNumberDtoList;
     }
 }
