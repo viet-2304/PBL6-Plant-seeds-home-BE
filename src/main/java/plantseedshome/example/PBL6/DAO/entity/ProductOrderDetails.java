@@ -6,29 +6,30 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "orders")
-@AllArgsConstructor
+@Table(name = "product_order_details")
 @NoArgsConstructor
-public class Orders {
+@AllArgsConstructor
+public class ProductOrderDetails {
     @Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
-    @Column(name= "order_id", columnDefinition = "VARCHAR(255)", insertable = false, updatable = false, nullable = false)
-    private String orderId;
+    @Column(name= "id", columnDefinition = "VARCHAR(255)", insertable = false, updatable = false, nullable = false)
+    private String id;
 
     @Column(name = "total")
     private String total;
 
-    @OneToOne
-    @JoinColumn(name="order_detail_id")
+    @Column(name = "number")
+    private String number;
+
+    @ManyToOne
+    @JoinColumn(name = "order_details_id")
     private OrderDetails orderDetails;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User users;
+    @JoinColumn(name = "product_id")
+    private Products products;
 }

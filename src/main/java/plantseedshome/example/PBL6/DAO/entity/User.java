@@ -43,7 +43,6 @@ public class User {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private  Collection<Comments> comments;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private Collection<OrderDetails> orderDetails;
+
 
 }
