@@ -26,6 +26,9 @@ public class OrderDetails {
     @Column(name = "update_date")
     private Date updateDate;
 
+    @Column(name = "address")
+    private String address;
+
     @OneToOne
     @JoinColumn(name = "paymenth_method")
     private  PaymentMethod paymentMethod;
