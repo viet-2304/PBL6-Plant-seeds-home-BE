@@ -55,7 +55,6 @@ public class CartServiceImpl implements CartService {
         Carts carts =  cartRepository.findById(id).get();
         CartDto cartDto = cartMapper.cartToCartDto(carts);
         CartResponseDto cartResponseDto = new CartResponseDto(cartDto.id, cartDto.number,productService.findProductById(carts.getProducts().getProductId()));
-
         return cartResponseDto;
     }
 
@@ -76,8 +75,6 @@ public class CartServiceImpl implements CartService {
             products.listProductAndNumberDto = value;
             productsWithShopDtos.add(products);
         });
-
-
         return new ProductResponseWithUserIdDto(userId, productsWithShopDtos);
     }
 
@@ -102,6 +99,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteProductInCart(String id) {
         cartRepository.deleteById(id);
+    }
+
+    public CartDto findCartDtoByCartId(String id) {
+        Carts carts =  cartRepository.findById(id).get();
+        return cartMapper.cartToCartDto(carts);
     }
 
     private List<ProductAndNumberDto> getProductAndNumberForCartDto(List<CartDto> cartDtoList) {

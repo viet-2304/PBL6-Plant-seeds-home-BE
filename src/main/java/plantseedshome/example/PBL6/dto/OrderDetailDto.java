@@ -5,13 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDetailDto {
     private String orderDetailId;
-    private String userId;
-    private String productId;
-    private String orderId;
+    private Date createDate;
+    private Date updateDate;
+    private String paymentMethod;
+    private String orderStatus;
+    private String address;
 }

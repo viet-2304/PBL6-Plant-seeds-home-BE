@@ -22,7 +22,7 @@ public class Orders {
     private String orderId;
 
     @Column(name = "total")
-    private String total;
+    private int total;
 
     @OneToOne
     @JoinColumn(name="order_detail_id")

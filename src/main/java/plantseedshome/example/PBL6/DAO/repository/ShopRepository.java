@@ -21,6 +21,6 @@ public interface ShopRepository extends JpaRepository<Shops, String> {
 
     @Modifying
     @Transactional
-    @Query("update Shops s set s.shopName = ?2, s.address = ?3, s.phoneNumber= ?4, s.email = ?5 where s.shopId = ?1")
+    @Query("update Shops s set s.shopName = ?2, s.address = ?3, s.phoneNumber= ?4, s.email = ?5, s.isDelete=false where s.shopId = ?1")
     void editShop(String id, String name, String address, String phoneNumber, String email);
 }
