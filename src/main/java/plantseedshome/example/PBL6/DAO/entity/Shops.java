@@ -35,7 +35,7 @@ public class Shops {
     @Column(name = "facebook_address")
     private String facebook;
 
-    @Column(name = "is_delete")
+    @Column(name = "isDelete")
     private Boolean isDelete;
 
     @OneToOne

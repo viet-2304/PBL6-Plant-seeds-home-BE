@@ -5,15 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDto {
-    private String orderId;
+public class OrderRequestDto {
+    private List<String> listCartId;
     private int total;
-    private String userId;
-    private String orderDetailId;
+    private String paymentMethodId;
+    private String address;
 }

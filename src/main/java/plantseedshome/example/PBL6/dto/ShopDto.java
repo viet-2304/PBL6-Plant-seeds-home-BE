@@ -16,4 +16,5 @@ public class ShopDto {
     public String phoneNumber;
     public String email;
     public String userId;
+    public String isDelete;
 }
