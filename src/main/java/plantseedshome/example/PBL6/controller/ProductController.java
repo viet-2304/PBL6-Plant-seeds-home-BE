@@ -6,12 +6,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.Services.ProductService;
+import plantseedshome.example.PBL6.common.constant.ProjectConstant;
 import plantseedshome.example.PBL6.dto.ProductDto;
+import plantseedshome.example.PBL6.dto.ProductRequestDto;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -21,6 +27,10 @@ import java.util.List;
 public class ProductController {
     @Autowired
     ProductService productService;
+
+    @Autowired
+    ServletContext servletContext;
+
 
     @GetMapping("/getAllProduct")
     public ResponseEntity<List<ProductDto>> getAllProduct() {
@@ -57,4 +67,15 @@ public class ProductController {
 //        List<ProductDto> newProduct = productService;
 //        return new ResponseEntity<>(newProduct, HttpStatus.OK);
 //    }
+    @PostMapping("/addNewProduct")
+    public ResponseEntity<String> createNewProduct(@RequestBody ProductRequestDto productRequestDto) {
+//        productService.createNewProduct(productRequestDto);
+        System.out.println(productRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/addProductImage")
+    public void saveProductImage(@RequestParam("image") MultipartFile multipartFiles)  {
+        productService.saveProductImage(multipartFiles);
+    }
 }

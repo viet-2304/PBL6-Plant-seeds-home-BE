@@ -23,8 +23,6 @@ public class User {
     @Column(name= "email", nullable = false)
     private String email;
 
-
-
     @Column(name= "user_name")
     private String userName;
 
