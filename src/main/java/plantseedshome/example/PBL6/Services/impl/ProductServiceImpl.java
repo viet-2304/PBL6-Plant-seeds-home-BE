@@ -2,6 +2,7 @@ package plantseedshome.example.PBL6.Services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
 //import plantseedshome.example.PBL6.DAO.repository.ImagesProductRepository;
@@ -9,9 +10,14 @@ import plantseedshome.example.PBL6.DAO.repository.ImagesProductRepository;
 import plantseedshome.example.PBL6.DAO.repository.ProductRepository;
 import plantseedshome.example.PBL6.DAO.repository.ProductTypeRepository;
 import plantseedshome.example.PBL6.Services.ProductService;
+import plantseedshome.example.PBL6.common.constant.ProjectConstant;
 import plantseedshome.example.PBL6.dto.ProductDto;
+import plantseedshome.example.PBL6.dto.ProductRequestDto;
 import plantseedshome.example.PBL6.mapper.ProductMapper;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,15 +26,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-   private final ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-   private final ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
-   private final ProductTypeRepository productTypeRepository;
+    private final ProductTypeRepository productTypeRepository;
 
+    private  final ImagesProductRepository imagesProductRepository;
 
+    private List<String> imageProducts = new ArrayList<>();
 
-private  final ImagesProductRepository imagesProductRepository;
     @Override
     public List<ProductDto> getAllProduct() {
        List<ProductDto> productDtos = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
@@ -56,6 +63,35 @@ private  final ImagesProductRepository imagesProductRepository;
     @Override
     public List<ProductType> getAllProductType() {
         return productTypeRepository.findAll();
+    }
+
+    @Override
+    public String createNewProduct(ProductRequestDto productRequestDto) {
+
+//        productRepository.save(productMapper.productRequestDtoToProduct(productRequestDto));
+        Products products = productRepository.findLastProduct().get();
+        System.out.println(products);
+        return null;
+    }
+
+    @Override
+    public void saveProductImage(MultipartFile multipartFiles) {
+        String path = System.getProperty("user.dir");
+        System.out.println(multipartFiles.getOriginalFilename());
+
+        if (multipartFiles != null) {
+            try {
+                String filePath =path + ProjectConstant.PROJECT_PATH + ProjectConstant.PRODUCT_IMAGE_PATH_FOLDER +multipartFiles.getOriginalFilename();
+                multipartFiles.transferTo(Path.of(filePath));
+                imageProducts.add(multipartFiles.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void saveImageProduct(String imageUrl, String productId){
+
     }
 
     //    @Override

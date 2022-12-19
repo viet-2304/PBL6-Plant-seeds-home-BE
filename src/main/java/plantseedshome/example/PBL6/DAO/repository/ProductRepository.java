@@ -17,5 +17,6 @@ public interface ProductRepository extends JpaRepository<Products, String> {
     @Query("SELECT p from Products p where p.productType.Name = :type")
     Optional<List<Products>> findProductsByType(@Param("type") String type);
 
-
+    @Query("select p from  Products p order by p.exp DESC NULLS LAST ")
+    Optional<Products> findLastProduct();
 }
