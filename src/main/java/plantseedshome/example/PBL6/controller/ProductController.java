@@ -1,5 +1,6 @@
 package plantseedshome.example.PBL6.controller;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,12 @@ import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.Services.ProductService;
 import plantseedshome.example.PBL6.dto.ProductDto;
+import plantseedshome.example.PBL6.dto.ProductRequestDto;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -21,6 +27,9 @@ import java.util.List;
 public class ProductController {
     @Autowired
     ProductService productService;
+
+    @Autowired
+    ServletContext servletContext;
 
     @GetMapping("/getAllProduct")
     public ResponseEntity<List<ProductDto>> getAllProduct() {
@@ -57,4 +66,26 @@ public class ProductController {
 //        List<ProductDto> newProduct = productService;
 //        return new ResponseEntity<>(newProduct, HttpStatus.OK);
 //    }
+
+    @PostMapping("/addProduct")
+    public ResponseEntity<String> createNewProduct(@RequestBody String request)  {
+
+        Gson gson = new Gson();
+        ProductRequestDto productRequestDto = gson.fromJson(request, ProductRequestDto.class);
+       String path = servletContext.getRealPath("/");
+
+       if (productRequestDto.getFiles() != null) {
+           try {
+               String filePath = path +"/images/" +productRequestDto.getFiles()[0].getOriginalFilename();
+               productRequestDto.getFiles()[0].transferTo(Path.of(filePath));
+               System.out.println(filePath);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+       System.out.println(productRequestDto);
+//       System.out.println(new Date(String.valueOf(productRequestDto.getMFG())));
+       return new ResponseEntity<>(HttpStatus.OK);
+
+    }
 }

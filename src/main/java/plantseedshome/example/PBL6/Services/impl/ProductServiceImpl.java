@@ -10,6 +10,7 @@ import plantseedshome.example.PBL6.DAO.repository.ProductRepository;
 import plantseedshome.example.PBL6.DAO.repository.ProductTypeRepository;
 import plantseedshome.example.PBL6.Services.ProductService;
 import plantseedshome.example.PBL6.dto.ProductDto;
+import plantseedshome.example.PBL6.dto.ProductRequestDto;
 import plantseedshome.example.PBL6.mapper.ProductMapper;
 
 import java.util.List;
@@ -57,6 +58,12 @@ private  final ImagesProductRepository imagesProductRepository;
     public List<ProductType> getAllProductType() {
         return productTypeRepository.findAll();
     }
+
+    @Override
+    public String createNewProduct(ProductRequestDto productRequestDto) {
+        return null;
+    }
+
 
     //    @Override
 //    public List<ProductDto> getListNewProduct() {
