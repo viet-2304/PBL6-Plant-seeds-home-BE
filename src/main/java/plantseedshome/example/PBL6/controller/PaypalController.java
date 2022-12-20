@@ -4,6 +4,9 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import plantseedshome.example.PBL6.Services.impl.PaypalServiceImpl;
@@ -22,27 +25,29 @@ public class PaypalController {
     PaypalServiceImpl paypalService;
 
     @PostMapping("/pay")
-    public String payment(PaypalDto paypalDto) {
+    public ResponseEntity<String> payment(@RequestBody  PaypalDto paypalDto) {
+         String responseUrl = "";
+         System.out.println(paypalDto);
         try {
             Payment payment = paypalService.createPayment(
-                    100000.0,
-                    "USD",
-                    "paypal",
+                    paypalDto.getPrice(),
+                   "USD",
+                    paypalDto.getMethod(),
                     "sale",
-                    "test payment",
-                    "http://localhost:8080/api/v1/payment" + CANCEL_URL,
-                    "http://localhost:8080/" + SUCCESS_URL);
+                    paypalDto.getDescription(),
+                    "https://plant-seeds-home.herokuapp.com/api/v1/payment" + CANCEL_URL,
+                    "https://plant-seeds-home.herokuapp.com/api/v1/payment" + SUCCESS_URL);
 
-            for(Links link:payment.getLinks()){
-                if(link.getRel().equals("approval_url")) {
-                    System.out.println(link.getHref());
+            for(Links link:payment.getLinks()) {
+                if (link.getRel().equals("approval_url")) {
+                    return new ResponseEntity<>(link.getHref(), HttpStatus.OK);
                 }
             }
         }
         catch (PayPalRESTException e) {
             e.printStackTrace();
         };
-        return "";
+        return new ResponseEntity<>("Error", HttpStatus.EXPECTATION_FAILED);
     }
 
     @GetMapping(value = CANCEL_URL)
