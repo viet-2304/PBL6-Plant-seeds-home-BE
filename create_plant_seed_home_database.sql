@@ -138,23 +138,24 @@ image_id varchar(255) not null,
   );
 
 Create Table order_details(
-  order_id varchar(255) not null,
+  order_details_id varchar(255) not null,
   create_date datetime,
   update_date datetime,
+  address varchar(255),
   paymenth_method varchar(255),
   order_status varchar(255),
-  primary key(order_id),
+  primary key(order_details_id),
   foreign key (paymenth_method) references payment_method(payment_method_id),
   foreign key (order_status) references order_status(status_id)
 );
 
 Create Table orders (
-    order_details_id varchar(255) not null,
-    total int,
     order_id varchar(255) not null,
+    total int,
+    order_detail_id varchar(255) not null,
     user_id varchar(255) not null,
-    primary key (order_details_id),
-    foreign key (order_id) references order_details(order_id),
+    primary key (order_id),
+    foreign key (order_detail_id) references order_details(order_details_id),
     foreign key(user_id) references users(user_id)
 );
 
@@ -165,7 +166,7 @@ Create Table product_order_details (
    order_details_id varchar(255) not null,
    product_id varchar(255) not null,
    primary key (id),
-   foreign key (order_details_id) references order_details(order_id),
+   foreign key (order_details_id) references order_details(order_details_id),
    foreign key (product_id) references products(product_id)
 );
 
