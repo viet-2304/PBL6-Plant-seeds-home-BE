@@ -4,6 +4,7 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -39,20 +40,14 @@ public class PaypalController {
 
             for(Links link:payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
-
                     return new ResponseEntity<>(link.getHref(), HttpStatus.OK);
-
                 }
             }
-
         }
         catch (PayPalRESTException e) {
             e.printStackTrace();
         };
-
-
         return new ResponseEntity<>("Error", HttpStatus.EXPECTATION_FAILED);
-
     }
 
     @GetMapping(value = CANCEL_URL)
