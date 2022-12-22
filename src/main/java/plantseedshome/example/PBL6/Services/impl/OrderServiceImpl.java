@@ -48,6 +48,18 @@ public class OrderServiceImpl implements OrderService {
     ProductRepository productRepository;
 
     @Override
+    public List<OrderResponseWithListProductDto> findOrderByUserId(String userId) {
+        List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findByUserId(userId).get();
+        ordersList.forEach(orders -> {
+            OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
+            List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
+            orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
+        });
+        return orderResponseWithListProductDtos;
+    }
+
+    @Override
     public List<OrderResponseWithListProductDto> getAllOrder() {
         List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
         List<Orders> ordersList = ordersRepository.findAll();
