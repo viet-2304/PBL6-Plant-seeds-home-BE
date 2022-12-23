@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.dto.ProductRequestDto;
+import plantseedshome.example.PBL6.dto.ProductResponseWithOrderDto;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface ProductMapper {
     @InheritInverseConfiguration(name = "productToProductDto")
     Products productDtoToProducts(ProductDto productDto);
 
-//    @Mapping(source = "shops", target = "shops.shopName")
+    //    @Mapping(source = "shops", target = "shops.shopName")
 //    @Mapping(source = "productType", target = "productType.name")
 //    @Mapping(source = "productName", target = "productName")
 //    Products productRequestDtoToProduct(ProductRequestDto productRequestDto);

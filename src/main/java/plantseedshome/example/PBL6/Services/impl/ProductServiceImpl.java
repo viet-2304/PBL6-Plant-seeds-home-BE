@@ -70,15 +70,12 @@ public class ProductServiceImpl implements ProductService {
 
 //        productRepository.save(productMapper.productRequestDtoToProduct(productRequestDto));
         Products products = productRepository.findLastProduct().get();
-        System.out.println(products);
         return null;
     }
 
     @Override
     public void saveProductImage(MultipartFile multipartFiles) {
         String path = System.getProperty("user.dir");
-        System.out.println(multipartFiles.getOriginalFilename());
-
         if (multipartFiles != null) {
             try {
                 String filePath =path + ProjectConstant.PROJECT_PATH + ProjectConstant.PRODUCT_IMAGE_PATH_FOLDER +multipartFiles.getOriginalFilename();

@@ -3,18 +3,14 @@ package plantseedshome.example.PBL6.Services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import plantseedshome.example.PBL6.DAO.entity.Carts;
-import plantseedshome.example.PBL6.DAO.entity.OrderDetails;
-import plantseedshome.example.PBL6.DAO.entity.Orders;
-import plantseedshome.example.PBL6.DAO.entity.ProductOrderDetails;
+import plantseedshome.example.PBL6.DAO.entity.*;
 import plantseedshome.example.PBL6.DAO.repository.CartRepository;
 import plantseedshome.example.PBL6.DAO.repository.OrdersRepository;
-import plantseedshome.example.PBL6.Services.CartService;
-import plantseedshome.example.PBL6.Services.OrderDetailService;
-import plantseedshome.example.PBL6.Services.OrderService;
-import plantseedshome.example.PBL6.Services.ProductOrderDetailService;
+import plantseedshome.example.PBL6.DAO.repository.ProductRepository;
+import plantseedshome.example.PBL6.Services.*;
 import plantseedshome.example.PBL6.dto.*;
 import plantseedshome.example.PBL6.mapper.OrderMapper;
+import plantseedshome.example.PBL6.mapper.ProductMapper;
 import plantseedshome.example.PBL6.mapper.ProductOrderDetailMapper;
 
 import java.sql.Date;
@@ -22,7 +18,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -43,6 +41,54 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderMapper orderMapper;
+
+    @Autowired
+    ProductMapper productMapper;
+
+    @Autowired
+    ProductRepository productRepository;
+
+    @Override
+    public List<OrderResponseWithListProductDto> findOrderByUserId(String userId) {
+        List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findByUserId(userId).get();
+        ordersList.forEach(orders -> {
+            OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
+            List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
+            orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
+        });
+        return orderResponseWithListProductDtos;
+    }
+
+    @Override
+    public List<OrderResponseWithListProductDto> getAllOrder() {
+        List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findAll();
+        ordersList.forEach(orders -> {
+           OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
+          List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
+          orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
+        });
+        return orderResponseWithListProductDtos;
+    }
+
+    @Override
+    public List<OrderResponseWithListProductDto> findOrderByShopId(String shopId) {
+        List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findAll();
+        ordersList.forEach(orders -> {
+            OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
+            List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
+            System.out.println(shopId.toString());
+System.out.println(productResponseWithOrderDtoList.stream().findFirst().get().getShopId());
+            if(productResponseWithOrderDtoList.get(0).getShopId() == shopId) {
+                System.out.println("yessssssssssssss");
+                orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
+            }
+        });
+        return  orderResponseWithListProductDtos;
+
+    }
 
     @Override
     public void createOrder(OrderRequestDto orderRequestDto) {
@@ -91,4 +137,25 @@ public class OrderServiceImpl implements OrderService {
         ordersRepository.save(orderMapper.orderDtoToOrder(orderDto));
     }
 
+    private List<ProductResponseWithOrderDto> getProductResponseWithOrderDto(String orderDetailId){
+       List<ProductOrderDetailDto> listProductOrderDetailDto = productOrderDetailService.findProductOrderDetailDtoByOrderDetailId(orderDetailId);
+       System.out.println(listProductOrderDetailDto);
+       List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = new ArrayList<>();
+
+       listProductOrderDetailDto.forEach(productOrderDetailDto -> {
+           Products products = productRepository.findById(productOrderDetailDto.getProductId()).get();
+           System.out.println(products.getProductId());
+            ProductResponseWithOrderDto productResponseWithOrderDto = new ProductResponseWithOrderDto(
+                    products.getProductId(),
+                    products.getProductName(),
+                    products.getShops().getShopId(),
+                    products.getShops().getShopName(),
+                    productOrderDetailDto.getNumber(),
+                    productOrderDetailDto.getTotalOfProduct()
+            );
+           productResponseWithOrderDtoList.add(productResponseWithOrderDto);
+       });
+
+       return productResponseWithOrderDtoList;
+    }
 }

@@ -27,7 +27,6 @@ public class PaypalController {
     @PostMapping("/pay")
     public ResponseEntity<String> payment(@RequestBody  PaypalDto paypalDto) {
          String responseUrl = "";
-         System.out.println(paypalDto);
         try {
             Payment payment = paypalService.createPayment(
                     paypalDto.getPrice(),

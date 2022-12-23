@@ -24,13 +24,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetailDto CreateOrderDetail(OrderDetailDto orderDetailDto)  {
         ordersDetailRepository.save(orderDetailMapper.orderDetailDtoToOrderDetail(orderDetailDto));
-        System.out.println(orderDetailDto.getCreateDate());
-
         List<OrderDetails> orderDetailsList = ordersDetailRepository.getOrderDetailsByCreateDate(orderDetailDto.getCreateDate()).get();
 
-        System.out.println(orderDetailsList.get(orderDetailsList.size()-1));
         return orderDetailMapper.orderDetailToOrderDetailDto(
                 orderDetailsList.get(orderDetailsList.size()-1)  );
-//        return null;
     }
 }
