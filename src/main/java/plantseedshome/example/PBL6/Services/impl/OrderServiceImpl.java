@@ -79,10 +79,7 @@ public class OrderServiceImpl implements OrderService {
         ordersList.forEach(orders -> {
             OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
             List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
-            System.out.println(shopId.toString());
-System.out.println(productResponseWithOrderDtoList.stream().findFirst().get().getShopId());
-            if(productResponseWithOrderDtoList.get(0).getShopId() == shopId) {
-                System.out.println("yessssssssssssss");
+            if(productResponseWithOrderDtoList.get(0).getShopId().equals(shopId) ) {
                 orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
             }
         });

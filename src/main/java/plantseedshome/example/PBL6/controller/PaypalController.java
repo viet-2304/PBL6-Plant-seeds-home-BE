@@ -9,8 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import plantseedshome.example.PBL6.Services.OrderService;
 import plantseedshome.example.PBL6.Services.impl.PaypalServiceImpl;
 import plantseedshome.example.PBL6.dto.PaypalDto;
+
+import java.text.ParseException;
 
 @Controller
 @RestController
@@ -24,9 +27,16 @@ public class PaypalController {
     @Autowired
     PaypalServiceImpl paypalService;
 
+    @Autowired
+    OrderService orderService;
+
     @PostMapping("/pay")
-    public ResponseEntity<String> payment(@RequestBody  PaypalDto paypalDto) {
+    public ResponseEntity<String> payment(@RequestBody  PaypalDto paypalDto) throws ParseException {
          String responseUrl = "";
+         System.out.println(paypalDto.getOrder());
+         if(paypalDto.getOrder() != null) {
+             orderService.createOrder(paypalDto.getOrder());
+         }
         try {
             Payment payment = paypalService.createPayment(
                     paypalDto.getPrice(),
