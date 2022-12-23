@@ -37,12 +37,16 @@ public class OrderController {
 
     @GetMapping("/getOrderByUserId")
     public ResponseEntity<List<OrderResponseWithListProductDto>> getOrderByUserId(@RequestParam String userId) {
+        System.out.println(userId);
         List<OrderResponseWithListProductDto> orderResponseWithListProductDtos =orderService.findOrderByUserId(userId);
-//        if(orderResponseWithListProductDtos.isEmpty()) {
-//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
         return new ResponseEntity<>(orderResponseWithListProductDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/getOrderByShopId")
+    public ResponseEntity<List<OrderResponseWithListProductDto>> getOrderByShopId(@RequestParam String shopId) {
+        System.out.println(shopId);
+        List<OrderResponseWithListProductDto> orderResponseWithListProductDtos =orderService.findOrderByShopId(shopId);
+        return new ResponseEntity<>(orderResponseWithListProductDtos, HttpStatus.OK);
+    }
 
 }

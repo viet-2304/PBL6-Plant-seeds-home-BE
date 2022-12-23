@@ -40,7 +40,6 @@ public class ProductController {
 
     @GetMapping("/getProduct")
     public ResponseEntity<ProductDto> getProductWithId(@RequestParam String id) {
-        System.out.print(id);
         ProductDto productDto= productService.findProductById(id);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }

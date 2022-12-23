@@ -11,4 +11,5 @@ public interface OrderService {
     void createOrder(OrderRequestDto orderRequestDto) throws ParseException;
     List<OrderResponseWithListProductDto> getAllOrder();
     List<OrderResponseWithListProductDto> findOrderByUserId(String userId);
+    List<OrderResponseWithListProductDto> findOrderByShopId(String shopId);
 }

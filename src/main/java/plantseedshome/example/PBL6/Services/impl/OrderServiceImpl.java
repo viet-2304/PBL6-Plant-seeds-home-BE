@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -69,6 +70,24 @@ public class OrderServiceImpl implements OrderService {
           orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
         });
         return orderResponseWithListProductDtos;
+    }
+
+    @Override
+    public List<OrderResponseWithListProductDto> findOrderByShopId(String shopId) {
+        List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findAll();
+        ordersList.forEach(orders -> {
+            OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
+            List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
+            System.out.println(shopId.toString());
+System.out.println(productResponseWithOrderDtoList.stream().findFirst().get().getShopId());
+            if(productResponseWithOrderDtoList.get(0).getShopId() == shopId) {
+                System.out.println("yessssssssssssss");
+                orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
+            }
+        });
+        return  orderResponseWithListProductDtos;
+
     }
 
     @Override
