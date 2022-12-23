@@ -20,6 +20,6 @@ public interface ProductService {
 
     String createNewProduct(ProductRequestDto productRequestDto);
 
-    void saveProductImage(MultipartFile multipartFile);
+    String saveProductImage(MultipartFile multipartFile);
 //    List<ProductDto> getListNewProduct();
 }

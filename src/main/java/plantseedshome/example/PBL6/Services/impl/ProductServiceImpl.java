@@ -74,17 +74,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void saveProductImage(MultipartFile multipartFiles) {
-        String path = System.getProperty("user.dir");
+    public String saveProductImage(MultipartFile multipartFiles) {
+        String systemPath = System.getProperty("user.dir");
+        String path = ProjectConstant.PROJECT_PATH + ProjectConstant.PRODUCT_IMAGE_PATH_FOLDER +multipartFiles.getOriginalFilename();
         if (multipartFiles != null) {
             try {
-                String filePath =path + ProjectConstant.PROJECT_PATH + ProjectConstant.PRODUCT_IMAGE_PATH_FOLDER +multipartFiles.getOriginalFilename();
+                String filePath =systemPath + path;
                 multipartFiles.transferTo(Path.of(filePath));
                 imageProducts.add(multipartFiles.getOriginalFilename());
+                return path;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return  null;
     }
 
     private void saveImageProduct(String imageUrl, String productId){

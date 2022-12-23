@@ -15,5 +15,6 @@ public class PaypalDto {
     private String method;
     private String intent;
     private String description;
+    private OrderRequestDto order;
 
 }
