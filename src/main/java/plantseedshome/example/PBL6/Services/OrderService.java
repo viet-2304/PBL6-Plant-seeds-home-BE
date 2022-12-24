@@ -14,4 +14,5 @@ public interface OrderService {
     List<OrderResponseWithListProductDto> findOrderByUserId(String userId);
     List<OrderResponseWithListProductDto> findOrderByShopId(String shopId);
     OrderResponseWithListProductDto updateOrderStatus(OrderStatusRequestDto orderStatusRequestDto);
+    OrderResponseWithListProductDto getOrderDetail(String orderId);
 }
