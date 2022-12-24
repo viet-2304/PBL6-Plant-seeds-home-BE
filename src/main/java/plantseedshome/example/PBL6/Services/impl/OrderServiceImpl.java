@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
         updateOrderDetailStatus(orderDetailId, orderStatusRequestDto.getStatusId());
         return getOrderResponseWithListProductByOrderId(orderStatusRequestDto.getOrderId());
     }
-
+    
     @Override
     public OrderResponseWithListProductDto getOrderDetail(String orderId) {
        return getOrderResponseWithListProductByOrderId(orderId);
