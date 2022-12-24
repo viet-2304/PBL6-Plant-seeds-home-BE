@@ -1,12 +1,9 @@
 package plantseedshome.example.PBL6.Services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import plantseedshome.example.PBL6.DAO.entity.*;
-import plantseedshome.example.PBL6.DAO.repository.CartRepository;
-import plantseedshome.example.PBL6.DAO.repository.OrdersRepository;
-import plantseedshome.example.PBL6.DAO.repository.ProductRepository;
+import plantseedshome.example.PBL6.DAO.repository.*;
 import plantseedshome.example.PBL6.Services.*;
 import plantseedshome.example.PBL6.dto.*;
 import plantseedshome.example.PBL6.mapper.OrderMapper;
@@ -14,13 +11,9 @@ import plantseedshome.example.PBL6.mapper.ProductMapper;
 import plantseedshome.example.PBL6.mapper.ProductOrderDetailMapper;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -48,6 +41,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    OrdersDetailRepository ordersDetailRepository;
+
+    @Autowired
+    OrderStatusRepository orderStatusRepository;
     @Override
     public List<OrderResponseWithListProductDto> findOrderByUserId(String userId) {
         List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
@@ -95,7 +93,25 @@ public class OrderServiceImpl implements OrderService {
         saveOrder(cartId, orderRequestDto.getTotal(), orderDetailId);
     }
 
-    private String saveOrderDetail( String paymentMethod, String address) {
+    @Override
+    public OrderResponseWithListProductDto updateOrderStatus(OrderStatusRequestDto orderStatusRequestDto) {
+        String orderDetailId = ordersRepository.findById(orderStatusRequestDto.getOrderId()).get().getOrderDetails().getId();
+        updateOrderDetailStatus(orderDetailId, orderStatusRequestDto.getStatusId());
+        return getOrderResponseWithListProductByOrderId(orderStatusRequestDto.getOrderId());
+    }
+
+    private void updateOrderDetailStatus(String orderDetailId, String statusId) {
+        OrderDetails orderDetails = ordersDetailRepository.findById(orderDetailId).get();
+        orderDetails.setOrderStatus(orderStatusRepository.getReferenceById(statusId));
+    }
+    private OrderResponseWithListProductDto getOrderResponseWithListProductByOrderId(String orderId) {
+        Orders orders =  ordersRepository.findById(orderId).get();
+        OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
+        List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
+        return new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList);
+    }
+
+    private String saveOrderDetail(String paymentMethod, String address) {
         OrderDetailDto orderDetailDto = new OrderDetailDto(
                 "",
                 Date.valueOf(LocalDate.now()),
@@ -152,7 +168,6 @@ public class OrderServiceImpl implements OrderService {
             );
            productResponseWithOrderDtoList.add(productResponseWithOrderDto);
        });
-
        return productResponseWithOrderDtoList;
     }
 }

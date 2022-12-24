@@ -7,9 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import plantseedshome.example.PBL6.Services.OrderService;
-import plantseedshome.example.PBL6.dto.OrderDto;
 import plantseedshome.example.PBL6.dto.OrderRequestDto;
 import plantseedshome.example.PBL6.dto.OrderResponseWithListProductDto;
+import plantseedshome.example.PBL6.dto.OrderStatusRequestDto;
 
 import java.text.ParseException;
 import java.util.List;
@@ -47,6 +47,15 @@ public class OrderController {
         System.out.println(shopId);
         List<OrderResponseWithListProductDto> orderResponseWithListProductDtos =orderService.findOrderByShopId(shopId);
         return new ResponseEntity<>(orderResponseWithListProductDtos, HttpStatus.OK);
+    }
+
+    @PostMapping("/updateStatus")
+    public ResponseEntity<OrderResponseWithListProductDto> editOrderStatus(@RequestBody OrderStatusRequestDto orderStatusRequestDto) {
+        OrderResponseWithListProductDto orderResponseWithListProductDto = orderService.updateOrderStatus(orderStatusRequestDto);
+        if(orderResponseWithListProductDto != null) {
+            return new ResponseEntity<>(orderResponseWithListProductDto, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 }
