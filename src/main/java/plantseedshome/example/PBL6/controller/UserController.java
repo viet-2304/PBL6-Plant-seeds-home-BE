@@ -54,7 +54,6 @@ public class UserController {
 
     @PostMapping("/editUser")
     public ResponseEntity<UserDto> editUser(@RequestBody UserDto userDto) {
-
         UserDto response = userService.editCurrentUser(userDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -64,5 +63,6 @@ public class UserController {
     public ResponseEntity<UserDto> unActiveUser(@RequestParam String userId, @RequestParam boolean isActive) {
            UserDto userDto =  userService.changeActive(userId, isActive);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+
     }
 }
