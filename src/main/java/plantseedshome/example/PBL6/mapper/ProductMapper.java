@@ -21,8 +21,8 @@ public interface ProductMapper {
     @InheritInverseConfiguration(name = "productToProductDto")
     Products productDtoToProducts(ProductDto productDto);
 
-    //    @Mapping(source = "shops", target = "shops.shopName")
-//    @Mapping(source = "productType", target = "productType.name")
-//    @Mapping(source = "productName", target = "productName")
-//    Products productRequestDtoToProduct(ProductRequestDto productRequestDto);
+        @Mapping(source = "shops", target = "shops.shopId")
+    @Mapping(source = "productType", target = "productType.productTypeId")
+    @Mapping(source = "productName", target = "productName")
+    Products productRequestDtoToProduct(ProductRequestDto productRequestDto);
 }
