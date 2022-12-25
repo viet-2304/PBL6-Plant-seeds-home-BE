@@ -43,20 +43,29 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getAllProduct() {
        List<ProductDto> productDtos = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
        imagesProductRepository.findAll();
-    productDtos.forEach(product -> product.setImageURL(imagesProductRepository.findImagesProductByProductId(product.getProductId())));
-    return productDtos;
+       productDtos.forEach(product -> product.setImageURL(imagesProductRepository.findImagesProductByProductId(product.getProductId())));
+        return productDtos;
     }
 
     @Override
     public ProductDto findProductById(String id) {
-        return productMapper.productToProductDto(productRepository.findById(id).get());
+        List<String> imageUrls = imagesProductRepository.findImagesProductByProductId(id);
+        ProductDto productDto = productMapper.productToProductDto(productRepository.findById(id).get());
+        productDto.setImageURL(imageUrls);
+        return productDto;
     }
 
     @Override
     public List<ProductDto> findProductByType(String typeName) {
+        List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> products = productRepository.findProductsByType(typeName).get();
         if(products != null) {
-            return products.stream().map(product -> productMapper.productToProductDto(product)).collect(Collectors.toList());
+            products.forEach(products1 -> {
+                ProductDto productDto = productMapper.productToProductDto(products1);
+                productDto.setImageURL(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
+                productDtoList.add(productDto);
+            });
+            return  productDtoList;
         }
         else{
             return null;
@@ -73,7 +82,6 @@ public class ProductServiceImpl implements ProductService {
         productRequestDto.setCreateDate(Date.valueOf(LocalDate.now()));
         productRepository.save(productMapper.productRequestDtoToProduct(productRequestDto));
         List<Products> products = productRepository.getProductByCreateDate(productRequestDto.getCreateDate()).get();
-        System.out.println(productRequestDto.getCreateDate());
         Products product = products.get(products.size()-1);
         imagesProductRepository.save(new ImagesProduct("", imageProducts.get(0), product,null));
         return null;
@@ -88,7 +96,6 @@ public class ProductServiceImpl implements ProductService {
                 String filePath =systemPath + path;
                 multipartFiles.transferTo(Path.of(filePath));
                 imageProducts.add(path);
-                System.out.println(imageProducts);
                 return path;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -96,13 +103,4 @@ public class ProductServiceImpl implements ProductService {
         }
         return  null;
     }
-
-    private void saveImageProduct(String imageUrl, String productId){
-
-    }
-
-    //    @Override
-//    public List<ProductDto> getListNewProduct() {
-//        List<ProductDto> newProduct = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
-//    }
 }
