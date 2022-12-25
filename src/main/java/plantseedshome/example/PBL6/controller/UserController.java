@@ -53,9 +53,9 @@ public class UserController {
     }
 
     @PostMapping("/editUser")
-    public ResponseEntity<String> editUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> editUser(@RequestBody UserDto userDto) {
 
-        userService.editCurrentUser(userDto);
-        return new ResponseEntity<>("create success",HttpStatus.OK);
+        UserDto response = userService.editCurrentUser(userDto);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
