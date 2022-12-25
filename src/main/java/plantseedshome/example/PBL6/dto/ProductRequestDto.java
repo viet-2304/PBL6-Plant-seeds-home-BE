@@ -14,15 +14,11 @@ import java.util.List;
 public class ProductRequestDto {
     private String productName;
     private String description;
-
-    private Date EXP;
-    private Date MFG;
+    private String EXP;
+    private String MFG;
     private String manufacturer;
     private int price;
-    private int rating;
     private int numberOfProduct;
-//    private List<String> imageURL;
-    private MultipartFile[] files;
     private String shops;
     private String productType;
 }

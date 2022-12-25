@@ -7,13 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.Services.ProductService;
+import plantseedshome.example.PBL6.common.constant.ProjectConstant;
 import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.dto.ProductRequestDto;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.nio.file.Path;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -31,6 +36,10 @@ public class ProductController {
     @Autowired
     ServletContext servletContext;
 
+
+    @Autowired
+    ServletContext servletContext;
+
     @GetMapping("/getAllProduct")
     public ResponseEntity<List<ProductDto>> getAllProduct() {
         List<ProductDto> productsList = productService.getAllProduct();
@@ -39,7 +48,6 @@ public class ProductController {
 
     @GetMapping("/getProduct")
     public ResponseEntity<ProductDto> getProductWithId(@RequestParam String id) {
-        System.out.print(id);
         ProductDto productDto= productService.findProductById(id);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
@@ -66,6 +74,17 @@ public class ProductController {
 //        List<ProductDto> newProduct = productService;
 //        return new ResponseEntity<>(newProduct, HttpStatus.OK);
 //    }
+    @PostMapping("/addNewProduct")
+    public ResponseEntity<String> createNewProduct(@RequestBody ProductRequestDto productRequestDto) {
+//        productService.createNewProduct(productRequestDto);
+        System.out.println(productRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/addProductImage")
+    public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles)  {
+       return productService.saveProductImage(multipartFiles);
+    }
 
     @PostMapping("/addProduct")
     public ResponseEntity<String> createNewProduct(@RequestBody String request)  {

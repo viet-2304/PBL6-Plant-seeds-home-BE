@@ -1,5 +1,6 @@
 package plantseedshome.example.PBL6.Services;
 
+import org.springframework.web.multipart.MultipartFile;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.dto.ProductDto;
@@ -18,5 +19,7 @@ public interface ProductService {
     List<ProductType> getAllProductType();
 
     String createNewProduct(ProductRequestDto productRequestDto);
+
+    String saveProductImage(MultipartFile multipartFile);
 //    List<ProductDto> getListNewProduct();
 }
