@@ -20,4 +20,7 @@ public interface ProductRepository extends JpaRepository<Products, String> {
 
     @Query("select  p from  Products p where p.createDate = ?1 ")
     Optional<List<Products>> getProductByCreateDate(Date createDate);
+
+    @Query("select p from Products p where p.shops.shopId= ?1")
+    Optional<List<Products>> findProductsByShopId(String shopId);
 }

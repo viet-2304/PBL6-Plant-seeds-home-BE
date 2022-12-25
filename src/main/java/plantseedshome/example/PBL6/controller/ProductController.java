@@ -38,6 +38,7 @@ public class ProductController {
     ServletContext servletContext;
 
     private List<String> urlImage = new ArrayList<>();
+
     @GetMapping("/getAllProduct")
     public ResponseEntity<List<ProductDto>> getAllProduct() {
         List<ProductDto> productsList = productService.getAllProduct();
@@ -46,66 +47,44 @@ public class ProductController {
 
     @GetMapping("/getProduct")
     public ResponseEntity<ProductDto> getProductWithId(@RequestParam String id) {
-        ProductDto productDto= productService.findProductById(id);
+        ProductDto productDto = productService.findProductById(id);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
     @GetMapping("/getProductWithType")
     public ResponseEntity<List<ProductDto>> getProductWithType(@RequestParam String type) {
-       List<ProductDto> productDto = productService.findProductByType(type);
+        List<ProductDto> productDto = productService.findProductByType(type);
         if (productDto != null) {
-            return  new ResponseEntity<>(productDto, HttpStatus.OK);
-        }
-        else {
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found");
+            return new ResponseEntity<>(productDto, HttpStatus.OK);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found");
         }
     }
 
     @GetMapping("/getAllProductType")
     public ResponseEntity<List<ProductType>> getAllProducType() {
-    List<ProductType> productTypes = productService.getAllProductType();
+        List<ProductType> productTypes = productService.getAllProductType();
         return new ResponseEntity<>(productTypes, HttpStatus.OK);
     }
 
-//    @GetMapping()
-//    public ResponseEntity<ProductDto> getListNewProduct() {
-//        List<ProductDto> newProduct = productService;
-//        return new ResponseEntity<>(newProduct, HttpStatus.OK);
-//    }
+    @GetMapping("/getProductByShop")
+    public ResponseEntity<List<ProductDto>> getProductByShop(@RequestParam String shopId){
+        List<ProductDto> productDtoList = productService.findProductByShopId(shopId);
+        return new ResponseEntity<>(productDtoList, HttpStatus.OK);
+    }
+
     @PostMapping("/addNewProduct")
     public ResponseEntity<String> createNewProduct(@RequestBody String request) {
         Gson gson = new Gson();
         ProductRequestDto productRequestDto = gson.fromJson(request, ProductRequestDto.class);
-        System.out.println(productRequestDto);
         productService.createNewProduct(productRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/addProductImage")
-    public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles)  {
+    public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles) {
 
-       return productService.saveProductImage(multipartFiles);
+        return productService.saveProductImage(multipartFiles);
     }
 
-//    @PostMapping("/addProduct")
-//    public ResponseEntity<String> createNewProduct(@RequestBody String request)  {
-//
-//        Gson gson = new Gson();
-//        ProductRequestDto productRequestDto = gson.fromJson(request, ProductRequestDto.class);
-//       String path = servletContext.getRealPath("/");
-//
-////           if (productRequestDto.getFiles() != null) {
-////           try {
-////               String filePath = path +"/images/" +productRequestDto.getFiles()[0].getOriginalFilename();
-////               productRequestDto.getFiles()[0].transferTo(Path.of(filePath));
-////               System.out.println(filePath);
-////           } catch (IOException e) {
-////               e.printStackTrace();
-////           }
-////       }
-//       System.out.println(productRequestDto);
-////       System.out.println(new Date(String.valueOf(productRequestDto.getMFG())));
-//       return new ResponseEntity<>(HttpStatus.OK);
-//
-//    }
 }
