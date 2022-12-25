@@ -75,4 +75,10 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
     }
+
+    @Override
+    public UserDto changeActive(String userId, boolean isActive) {
+        userRepository.changeActiveUser(userId, isActive);
+        return userMapper.userToUserDto(userRepository.findById(userId).get());
+    }
 }

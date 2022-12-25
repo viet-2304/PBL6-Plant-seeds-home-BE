@@ -15,4 +15,6 @@ public interface UserService {
     UserDto editCurrentUser(UserDto userDto);
 
     void updateUserRole(String userId,String role);
+
+    UserDto changeActive(String userId, boolean isActive);
 }
