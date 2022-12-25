@@ -27,10 +27,13 @@ public class Products {
     private String description;
 
     @Column(name = "EXP")
-    private Date exp;
+    private Date EXP;
 
     @Column(name = "MFG")
     private Date MFG;
+
+    @Column(name = "create_date")
+    private Date createDate;
 
     @Column(name = "manufacturer")
     private String manufacturer;

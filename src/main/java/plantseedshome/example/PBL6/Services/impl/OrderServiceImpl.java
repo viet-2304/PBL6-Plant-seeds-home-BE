@@ -91,6 +91,9 @@ public class OrderServiceImpl implements OrderService {
         saveProductOrderDetail(orderRequestDto.getListCartId(), orderDetailId);
         String cartId = orderRequestDto.getListCartId().get(0);
         saveOrder(cartId, orderRequestDto.getTotal(), orderDetailId);
+        orderRequestDto.getListCartId().forEach(cart-> {
+            cartService.deleteProductInCart(cart);
+        });
     }
 
     @Override

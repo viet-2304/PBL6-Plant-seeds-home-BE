@@ -1,5 +1,6 @@
 package plantseedshome.example.PBL6.controller;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,11 @@ import plantseedshome.example.PBL6.dto.ProductRequestDto;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.nio.file.Path;
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -31,7 +37,7 @@ public class ProductController {
     @Autowired
     ServletContext servletContext;
 
-
+    private List<String> urlImage = new ArrayList<>();
     @GetMapping("/getAllProduct")
     public ResponseEntity<List<ProductDto>> getAllProduct() {
         List<ProductDto> productsList = productService.getAllProduct();
@@ -67,14 +73,39 @@ public class ProductController {
 //        return new ResponseEntity<>(newProduct, HttpStatus.OK);
 //    }
     @PostMapping("/addNewProduct")
-    public ResponseEntity<String> createNewProduct(@RequestBody ProductRequestDto productRequestDto) {
-//        productService.createNewProduct(productRequestDto);
+    public ResponseEntity<String> createNewProduct(@RequestBody String request) {
+        Gson gson = new Gson();
+        ProductRequestDto productRequestDto = gson.fromJson(request, ProductRequestDto.class);
         System.out.println(productRequestDto);
+        productService.createNewProduct(productRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/addProductImage")
     public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles)  {
+
        return productService.saveProductImage(multipartFiles);
     }
+
+//    @PostMapping("/addProduct")
+//    public ResponseEntity<String> createNewProduct(@RequestBody String request)  {
+//
+//        Gson gson = new Gson();
+//        ProductRequestDto productRequestDto = gson.fromJson(request, ProductRequestDto.class);
+//       String path = servletContext.getRealPath("/");
+//
+////           if (productRequestDto.getFiles() != null) {
+////           try {
+////               String filePath = path +"/images/" +productRequestDto.getFiles()[0].getOriginalFilename();
+////               productRequestDto.getFiles()[0].transferTo(Path.of(filePath));
+////               System.out.println(filePath);
+////           } catch (IOException e) {
+////               e.printStackTrace();
+////           }
+////       }
+//       System.out.println(productRequestDto);
+////       System.out.println(new Date(String.valueOf(productRequestDto.getMFG())));
+//       return new ResponseEntity<>(HttpStatus.OK);
+//
+//    }
 }

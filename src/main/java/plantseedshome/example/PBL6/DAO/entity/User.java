@@ -28,11 +28,15 @@ public class User {
 
     @Column(name= "password")
     private String password;
+
     @Column(name= "phone_number")
     private String phoneNumber;
 
     @Column(name= "address")
     private String address;
+
+    @Column(name = "is_active")
+    private boolean isActive;
 
     @ManyToOne()
     @JoinColumn(name= "role_id")
