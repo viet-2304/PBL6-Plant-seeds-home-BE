@@ -82,9 +82,8 @@ public class ProductController {
     }
 
     @PostMapping("/addProductImage")
-    public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles) {
-
-        return productService.saveProductImage(multipartFiles);
+    public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles)  {
+       return productService.saveProductImage(multipartFiles);
     }
 
 }

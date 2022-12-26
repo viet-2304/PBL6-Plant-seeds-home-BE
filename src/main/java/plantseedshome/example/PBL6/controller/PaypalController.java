@@ -31,15 +31,13 @@ public class PaypalController {
 
     @Autowired
     OrderService orderService;
-
-    @Autowired
-    CartService cartService;
-
-    private OrderRequestDto orderRequestDto = new OrderRequestDto();
     @PostMapping("/pay")
     public ResponseEntity<String> payment(@RequestBody  PaypalDto paypalDto) throws ParseException {
          String responseUrl = "";
-          orderRequestDto = paypalDto.getOrder();
+         System.out.println(paypalDto.getOrder());
+         if(paypalDto.getOrder() != null) {
+             orderService.createOrder(paypalDto.getOrder());
+         }
         try {
             Payment payment = paypalService.createPayment(
                     paypalDto.getPrice(),
