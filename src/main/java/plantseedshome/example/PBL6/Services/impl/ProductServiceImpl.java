@@ -83,7 +83,6 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(productMapper.productRequestDtoToProduct(productRequestDto));
         List<Products> products = productRepository.getProductByCreateDate(productRequestDto.getCreateDate()).get();
         Products product = products.get(products.size()-1);
-        String productImage = "";
         if(productRequestDto.getImagesUrl() != null) {
             productRequestDto.getImagesUrl().forEach(image -> {
                 imagesProductRepository.save(new ImagesProduct("", image, product,null));

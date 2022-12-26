@@ -10,21 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
-import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.Services.ProductService;
-import plantseedshome.example.PBL6.common.constant.ProjectConstant;
 import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.dto.ProductRequestDto;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.nio.file.Path;
-import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -78,6 +72,19 @@ public class ProductController {
         Gson gson = new Gson();
         ProductRequestDto productRequestDto = gson.fromJson(request, ProductRequestDto.class);
         productService.createNewProduct(productRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','SELLER')")
+    @PostMapping("/addMultiProduct")
+    public ResponseEntity<String> createMultiProduct(@RequestBody String request, @RequestParam String shopId) {
+        Gson gson = new Gson();
+       ProductRequestDto[] productRequestDtos = gson.fromJson(request, ProductRequestDto[].class);
+       Arrays.stream(productRequestDtos).map(productRequestDto -> {
+           productRequestDto.setShops(shopId);
+            productService.createNewProduct(productRequestDto);
+           return null;
+       }).collect(Collectors.toList());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
