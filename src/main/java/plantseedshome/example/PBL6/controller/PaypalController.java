@@ -52,6 +52,7 @@ public class PaypalController {
 
             for(Links link:payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
+                    orderService.createOrder(orderRequestDto);
                     return new ResponseEntity<>(link.getHref(), HttpStatus.OK);
                 }
             }

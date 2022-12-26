@@ -20,6 +20,7 @@ public class ProductRequestDto {
     private String manufacturer;
     private int price;
     private int numberOfProduct;
+    private List<String> imagesUrl;
     private String shops;
     private String productType;
 }
