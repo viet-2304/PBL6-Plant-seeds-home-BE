@@ -21,5 +21,6 @@ public interface ProductService {
     String createNewProduct(ProductRequestDto productRequestDto);
 
     String saveProductImage(MultipartFile multipartFile);
-//    List<ProductDto> getListNewProduct();
+
+    List<ProductDto> findProductByShopId(String shopId);
 }

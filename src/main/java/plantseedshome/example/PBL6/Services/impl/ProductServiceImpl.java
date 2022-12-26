@@ -103,4 +103,18 @@ public class ProductServiceImpl implements ProductService {
         }
         return  null;
     }
+
+    @Override
+    public List<ProductDto> findProductByShopId(String shopId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> products = productRepository.findProductsByShopId(shopId).get();
+        products.forEach(products1 -> {
+            ProductDto productDto = productMapper.productToProductDto(products1);
+            productDto.setImageURL(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
+            productDtoList.add(productDto);
+        });
+        return productDtoList;
+    }
+
+
 }
