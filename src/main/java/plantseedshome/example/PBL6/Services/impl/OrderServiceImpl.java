@@ -46,6 +46,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderStatusRepository orderStatusRepository;
+
+    @Autowired
+    ImagesProductRepository imagesProductRepository;
+
     @Override
     public List<OrderResponseWithListProductDto> findOrderByUserId(String userId) {
         List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
@@ -111,6 +115,7 @@ public class OrderServiceImpl implements OrderService {
     private void updateOrderDetailStatus(String orderDetailId, String statusId) {
         OrderDetails orderDetails = ordersDetailRepository.findById(orderDetailId).get();
         orderDetails.setOrderStatus(orderStatusRepository.getReferenceById(statusId));
+        ordersDetailRepository.save(orderDetails);
     }
     private OrderResponseWithListProductDto getOrderResponseWithListProductByOrderId(String orderId) {
         Orders orders =  ordersRepository.findById(orderId).get();
@@ -165,10 +170,11 @@ public class OrderServiceImpl implements OrderService {
 
        listProductOrderDetailDto.forEach(productOrderDetailDto -> {
            Products products = productRepository.findById(productOrderDetailDto.getProductId()).get();
-           System.out.println(products.getProductId());
+            List<String> imagesUrl = imagesProductRepository.findImagesProductByProductId(products.getProductId());
             ProductResponseWithOrderDto productResponseWithOrderDto = new ProductResponseWithOrderDto(
                     products.getProductId(),
                     products.getProductName(),
+                    imagesUrl,
                     products.getShops().getShopId(),
                     products.getShops().getShopName(),
                     productOrderDetailDto.getNumber(),

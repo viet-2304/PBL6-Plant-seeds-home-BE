@@ -10,21 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
-import plantseedshome.example.PBL6.DAO.entity.Products;
 import plantseedshome.example.PBL6.Services.ProductService;
-import plantseedshome.example.PBL6.common.constant.ProjectConstant;
 import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.dto.ProductRequestDto;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.nio.file.Path;
-import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -81,9 +75,38 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','SELLER')")
+    @PostMapping("/addMultiProduct")
+    public ResponseEntity<String> createMultiProduct(@RequestBody String request, @RequestParam String shopId) {
+        Gson gson = new Gson();
+       ProductRequestDto[] productRequestDtos = gson.fromJson(request, ProductRequestDto[].class);
+       Arrays.stream(productRequestDtos).map(productRequestDto -> {
+           productRequestDto.setShops(shopId);
+            productService.createNewProduct(productRequestDto);
+           return null;
+       }).collect(Collectors.toList());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    @PostMapping("/editProduct")
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody String productDto) {
+        Gson gson = new Gson();
+        ProductRequestDto productRequestDto = gson.fromJson(productDto, ProductRequestDto.class);
+        ProductDto response = productService.updateProduct(productRequestDto);
+        if(response != null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/deleteProduct")
+    public ResponseEntity<String> deleteProduct(@RequestParam("productId") String productId) {
+      return new ResponseEntity<>(productService.deleteProduct(productId),HttpStatus.OK);
+    }
+
     @PostMapping("/addProductImage")
     public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles) {
-
         return productService.saveProductImage(multipartFiles);
     }
 
