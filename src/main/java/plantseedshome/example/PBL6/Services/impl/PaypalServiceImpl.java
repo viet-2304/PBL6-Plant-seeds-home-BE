@@ -2,6 +2,7 @@ package plantseedshome.example.PBL6.Services.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +17,17 @@ import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import plantseedshome.example.PBL6.Services.OrderService;
+import plantseedshome.example.PBL6.dto.OrderRequestDto;
 
 @Service
 public class PaypalServiceImpl  {
 
     @Autowired
     private APIContext apiContext;
+
+    @Autowired
+    private OrderService orderService;
 
     public Payment createPayment(
             Double total,
@@ -58,7 +64,7 @@ public class PaypalServiceImpl  {
         return payment.create(apiContext);
     }
 
-    public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException{
+    public Payment executePayment(String paymentId, String payerId, OrderRequestDto orderRequestDto) throws PayPalRESTException, ParseException {
         Payment payment = new Payment();
         payment.setId(paymentId);
         PaymentExecution paymentExecute = new PaymentExecution();

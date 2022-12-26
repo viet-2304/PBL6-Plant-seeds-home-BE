@@ -23,6 +23,9 @@ public class LoginController {
         if (loginResponseDto.getUserDto() ==  null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+        if(loginResponseDto.getToken() == "unActive") {
+            return  new ResponseEntity<>(null, HttpStatus.LOCKED);
+        }
 
         return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }

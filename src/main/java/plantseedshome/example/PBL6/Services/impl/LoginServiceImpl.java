@@ -49,7 +49,11 @@ public class LoginServiceImpl implements LoginService {
 
         final User user = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("Incorrect email or password."));
+
     if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
+        if(user.isActive() == false) {
+            return new LoginResponseDto("unActive", null);
+        }
         final UserDetails userDetails = customerUserDetailsService.loadUserByUsername(loginRequestDto.getEmail().trim());
         final String token = jwtUtil.generateToken(userDetails);
         UserDto userDto = userMapper.userToUserDto(user);

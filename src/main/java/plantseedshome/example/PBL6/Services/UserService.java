@@ -12,7 +12,9 @@ public interface UserService {
 
     UserDto getCurrentUser(String email);
 
-    void editCurrentUser(UserDto userDto);
+    UserDto editCurrentUser(UserDto userDto);
 
     void updateUserRole(String userId,String role);
+
+    UserDto changeActive(String userId, boolean isActive);
 }

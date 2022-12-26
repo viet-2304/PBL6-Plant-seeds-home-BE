@@ -54,19 +54,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editCurrentUser(UserDto userDto) {
+    public UserDto editCurrentUser(UserDto userDto) {
         if(userRepository.findById(userDto.getId()).isPresent()) {
             User user = userRepository.findById(userDto.getId()).get();
-    user.setUserName(userDto.getUserName());
-    user.setAddress(userDto.getAddress());
-    user.setEmail(userDto.getEmail());
-    user.setPhoneNumber(userDto.getPhoneNumber());
+                user.setUserName(userDto.getUserName());
+                user.setAddress(userDto.getAddress());
+                user.setEmail(userDto.getEmail());
+                user.setPhoneNumber(userDto.getPhoneNumber());
             userRepository.save(user);
-
-
+            return userMapper.userToUserDto(user);
         }
-//        userRepository.save(userMapper.userDtoToUser(userDto));
-
+        return null;
     }
 
     @Override
@@ -76,5 +74,11 @@ public class UserServiceImpl implements UserService {
             user.setRoles(roleRepository.getReferenceById(role));
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public UserDto changeActive(String userId, boolean isActive) {
+        userRepository.changeActiveUser(userId, isActive);
+        return userMapper.userToUserDto(userRepository.findById(userId).get());
     }
 }

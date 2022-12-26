@@ -9,8 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import plantseedshome.example.PBL6.Services.CartService;
 import plantseedshome.example.PBL6.Services.OrderService;
 import plantseedshome.example.PBL6.Services.impl.PaypalServiceImpl;
+import plantseedshome.example.PBL6.dto.OrderRequestDto;
 import plantseedshome.example.PBL6.dto.PaypalDto;
 
 import java.text.ParseException;
@@ -21,15 +23,14 @@ import java.text.ParseException;
 @CrossOrigin
 public class PaypalController {
 
-    public static final String SUCCESS_URL = "success";
-    public static final String CANCEL_URL = "cancel";
+    public static final String SUCCESS_URL = "paymentSuccess";
+    public static final String CANCEL_URL = "paymentCancel";
 
     @Autowired
     PaypalServiceImpl paypalService;
 
     @Autowired
     OrderService orderService;
-
     @PostMapping("/pay")
     public ResponseEntity<String> payment(@RequestBody  PaypalDto paypalDto) throws ParseException {
          String responseUrl = "";
@@ -44,8 +45,8 @@ public class PaypalController {
                     paypalDto.getMethod(),
                     "sale",
                     paypalDto.getDescription(),
-                    "https://plant-seeds-home.herokuapp.com/api/v1/payment" + CANCEL_URL,
-                    "https://plant-seeds-home.herokuapp.com/api/v1/payment" + SUCCESS_URL);
+                    "http://localhost:3000/api/v1/" + CANCEL_URL,
+                    "http://localhost:3000/api/v1/" + SUCCESS_URL);
 
             for(Links link:payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
@@ -67,12 +68,11 @@ public class PaypalController {
     @GetMapping(value = SUCCESS_URL)
     public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
         try {
-            Payment payment = paypalService.executePayment(paymentId, payerId);
-            System.out.println(payment.toJSON());
+            Payment payment = paypalService.executePayment(paymentId, payerId ,orderRequestDto);
             if (payment.getState().equals("approved")) {
                 return "success";
             }
-        } catch (PayPalRESTException e) {
+        } catch (PayPalRESTException | ParseException e) {
             System.out.println(e.getMessage());
         }
         return "";

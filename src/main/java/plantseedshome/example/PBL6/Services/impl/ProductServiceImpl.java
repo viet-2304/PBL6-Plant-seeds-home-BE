@@ -3,9 +3,9 @@ package plantseedshome.example.PBL6.Services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import plantseedshome.example.PBL6.DAO.entity.ImagesProduct;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
-//import plantseedshome.example.PBL6.DAO.repository.ImagesProductRepository;
 import plantseedshome.example.PBL6.DAO.repository.ImagesProductRepository;
 import plantseedshome.example.PBL6.DAO.repository.ProductRepository;
 import plantseedshome.example.PBL6.DAO.repository.ProductTypeRepository;
@@ -17,10 +17,13 @@ import plantseedshome.example.PBL6.mapper.ProductMapper;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -40,20 +43,29 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getAllProduct() {
        List<ProductDto> productDtos = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
        imagesProductRepository.findAll();
-    productDtos.forEach(product -> product.setImageURL(imagesProductRepository.findImagesProductByProductId(product.getProductId())));
-    return productDtos;
+       productDtos.forEach(product -> product.setImageURL(imagesProductRepository.findImagesProductByProductId(product.getProductId())));
+        return productDtos;
     }
 
     @Override
     public ProductDto findProductById(String id) {
-        return productMapper.productToProductDto(productRepository.findById(id).get());
+        List<String> imageUrls = imagesProductRepository.findImagesProductByProductId(id);
+        ProductDto productDto = productMapper.productToProductDto(productRepository.findById(id).get());
+        productDto.setImageURL(imageUrls);
+        return productDto;
     }
 
     @Override
     public List<ProductDto> findProductByType(String typeName) {
+        List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> products = productRepository.findProductsByType(typeName).get();
         if(products != null) {
-            return products.stream().map(product -> productMapper.productToProductDto(product)).collect(Collectors.toList());
+            products.forEach(products1 -> {
+                ProductDto productDto = productMapper.productToProductDto(products1);
+                productDto.setImageURL(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
+                productDtoList.add(productDto);
+            });
+            return  productDtoList;
         }
         else{
             return null;
@@ -67,9 +79,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String createNewProduct(ProductRequestDto productRequestDto) {
-
-//        productRepository.save(productMapper.productRequestDtoToProduct(productRequestDto));
-        Products products = productRepository.findLastProduct().get();
+        productRequestDto.setCreateDate(Date.valueOf(LocalDate.now()));
+        productRepository.save(productMapper.productRequestDtoToProduct(productRequestDto));
+        List<Products> products = productRepository.getProductByCreateDate(productRequestDto.getCreateDate()).get();
+        Products product = products.get(products.size()-1);
+        imagesProductRepository.save(new ImagesProduct("", imageProducts.get(0), product,null));
         return null;
     }
 
@@ -81,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
             try {
                 String filePath =systemPath + path;
                 multipartFiles.transferTo(Path.of(filePath));
-                imageProducts.add(multipartFiles.getOriginalFilename());
+                imageProducts.add(path);
                 return path;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -90,12 +104,17 @@ public class ProductServiceImpl implements ProductService {
         return  null;
     }
 
-    private void saveImageProduct(String imageUrl, String productId){
-
+    @Override
+    public List<ProductDto> findProductByShopId(String shopId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> products = productRepository.findProductsByShopId(shopId).get();
+        products.forEach(products1 -> {
+            ProductDto productDto = productMapper.productToProductDto(products1);
+            productDto.setImageURL(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
+            productDtoList.add(productDto);
+        });
+        return productDtoList;
     }
 
-    //    @Override
-//    public List<ProductDto> getListNewProduct() {
-//        List<ProductDto> newProduct = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
-//    }
+
 }
