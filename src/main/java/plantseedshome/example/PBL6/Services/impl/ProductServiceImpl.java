@@ -2,6 +2,7 @@ package plantseedshome.example.PBL6.Services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import plantseedshome.example.PBL6.DAO.entity.ImagesProduct;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
@@ -43,15 +44,15 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getAllProduct() {
        List<ProductDto> productDtos = productRepository.findAll().stream().map(products -> productMapper.productToProductDto(products)).collect(Collectors.toList());
        imagesProductRepository.findAll();
-       productDtos.forEach(product -> product.setImageURL(imagesProductRepository.findImagesProductByProductId(product.getProductId())));
+       productDtos.forEach(product -> product.setImagesUrl(imagesProductRepository.findImagesProductByProductId(product.getProductId())));
         return productDtos;
     }
 
     @Override
     public ProductDto findProductById(String id) {
-        List<String> imageUrls = imagesProductRepository.findImagesProductByProductId(id);
+        List<String> imagesUrl = imagesProductRepository.findImagesProductByProductId(id);
         ProductDto productDto = productMapper.productToProductDto(productRepository.findById(id).get());
-        productDto.setImageURL(imageUrls);
+        productDto.setImagesUrl(imagesUrl);
         return productDto;
     }
 
@@ -62,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
         if(products != null) {
             products.forEach(products1 -> {
                 ProductDto productDto = productMapper.productToProductDto(products1);
-                productDto.setImageURL(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
+                productDto.setImagesUrl(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
                 productDtoList.add(productDto);
             });
             return  productDtoList;
@@ -90,9 +91,7 @@ public class ProductServiceImpl implements ProductService {
         }
         else {
             imagesProductRepository.save(new ImagesProduct("", "", product,null));
-
         }
-
         return null;
     }
 
@@ -119,11 +118,36 @@ public class ProductServiceImpl implements ProductService {
         List<Products> products = productRepository.findProductsByShopId(shopId).get();
         products.forEach(products1 -> {
             ProductDto productDto = productMapper.productToProductDto(products1);
-            productDto.setImageURL(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
+            productDto.setImagesUrl(imagesProductRepository.findImagesProductByProductId(products1.getProductId()));
             productDtoList.add(productDto);
         });
         return productDtoList;
     }
 
+    @Override
+    public ProductDto updateProduct(@RequestBody ProductRequestDto productRequestDto) {
+        Products products = productRepository.findById(productRequestDto.getProductId()).get();
+        if (products != null) {
+            Products tempProduct = productMapper.productRequestDtoToProduct(productRequestDto);
+            imagesProductRepository.removeImagesProductByProductId(productRequestDto.getProductId());
+            productRequestDto.getImagesUrl().forEach(imageProduct -> {
+                imagesProductRepository.save(new ImagesProduct("", imageProduct, products, null));
+            });
+            productRepository.save(tempProduct);
+            ProductDto productDto =productMapper.productToProductDto(products);
+            productDto.setImagesUrl(productRequestDto.getImagesUrl());
+            return productDto;
+        }
+        return null;
+    }
 
+    @Override
+    public String deleteProduct(String productId) {
+        if(productRepository.findById(productId).isPresent()) {
+            imagesProductRepository.removeImagesProductByProductId(productId);
+            productRepository.deleteById(productId);
+            return "success";
+        }
+        return "false";
+    }
 }
