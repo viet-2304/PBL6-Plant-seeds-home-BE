@@ -7,9 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import plantseedshome.example.PBL6.DAO.entity.ImagesProduct;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
 import plantseedshome.example.PBL6.DAO.entity.Products;
-import plantseedshome.example.PBL6.DAO.repository.ImagesProductRepository;
-import plantseedshome.example.PBL6.DAO.repository.ProductRepository;
-import plantseedshome.example.PBL6.DAO.repository.ProductTypeRepository;
+import plantseedshome.example.PBL6.DAO.repository.*;
 import plantseedshome.example.PBL6.Services.ProductService;
 import plantseedshome.example.PBL6.common.constant.ProjectConstant;
 import plantseedshome.example.PBL6.dto.ProductDto;
@@ -37,6 +35,10 @@ public class ProductServiceImpl implements ProductService {
     private final ProductTypeRepository productTypeRepository;
 
     private  final ImagesProductRepository imagesProductRepository;
+
+    private final ProductOrderDetailsRepository productOrderDetailsRepository;
+
+    private final CartRepository cartRepository;
 
     private List<String> imageProducts = new ArrayList<>();
 
@@ -144,6 +146,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String deleteProduct(String productId) {
         if(productRepository.findById(productId).isPresent()) {
+            productOrderDetailsRepository.deleteProductOrderDetailsByProductId(productId);
+            cartRepository.deleteCartWithProduct(productId);
             imagesProductRepository.removeImagesProductByProductId(productId);
             productRepository.deleteById(productId);
             return "success";

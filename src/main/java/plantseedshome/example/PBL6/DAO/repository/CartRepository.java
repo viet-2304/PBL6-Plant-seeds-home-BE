@@ -27,4 +27,8 @@ public interface CartRepository extends JpaRepository<Carts, String> {
     @Query("select c from Carts c where c.users.id= ?1 and  c.products.productId = ?2")
     Optional<Carts> findByUserAndProduct(String userId, String productId);
 
+    @Modifying
+    @Transactional
+    @Query(" delete from Carts  c where c.products.productId = ?1")
+    void deleteCartWithProduct(String productId);
 }
