@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import plantseedshome.example.PBL6.DAO.entity.User;
+import plantseedshome.example.PBL6.DAO.repository.ImagesAvatarRepository;
 import plantseedshome.example.PBL6.DAO.repository.RoleRepository;
 import plantseedshome.example.PBL6.DAO.repository.UserRepository;
 import plantseedshome.example.PBL6.Services.UserService;
@@ -28,10 +29,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    ImagesAvatarRepository imagesAvatarRepository;
+
 
     @Override
     public List<UserDto> getAllUser() {
-     return   userRepository.findAll().stream().map(user -> userMapper.userToUserDto(user)).collect(Collectors.toList());
+        List<UserDto> userDtos = userRepository.findAll().stream().map(user -> userMapper.userToUserDto(user)).collect(Collectors.toList());
+        userDtos.forEach(userDto -> {
+            userDto.setImageAvatar(imagesAvatarRepository.getImageAvatarByUserId(userDto.getId()));
+        });
+        return userDtos;
     }
 
     @Override
@@ -40,17 +48,25 @@ public class UserServiceImpl implements UserService {
             userRegisterDto.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
             userRegisterDto.setRoleId("1");
             User user = userMapper.userRegisterToUser(userRegisterDto);
+            user.setActive(true);
             userRepository.save(user);
             return "success";
         } else {
             return "error";
         }
-
     }
 
     @Override
     public UserDto getCurrentUser(String email) {
-       return userMapper.userToUserDto(userRepository.findByEmail(email).get());
+       UserDto userDto = userMapper.userToUserDto(userRepository.findByEmail(email).get());
+       try {
+           String imageAvatar = imagesAvatarRepository.getImageAvatarByUserId(userDto.getId());
+           if (!imageAvatar.isEmpty()) {
+               userDto.setImageAvatar(imageAvatar);
+           }
+       } catch (NullPointerException e) {
+       }
+       return userDto;
     }
 
     @Override
@@ -61,6 +77,7 @@ public class UserServiceImpl implements UserService {
                 user.setAddress(userDto.getAddress());
                 user.setEmail(userDto.getEmail());
                 user.setPhoneNumber(userDto.getPhoneNumber());
+                imagesAvatarRepository.updateAvatarImage(userDto.getId(), userDto.getImageAvatar());
             userRepository.save(user);
             return userMapper.userToUserDto(user);
         }
@@ -80,5 +97,16 @@ public class UserServiceImpl implements UserService {
     public UserDto changeActive(String userId, boolean isActive) {
         userRepository.changeActiveUser(userId, isActive);
         return userMapper.userToUserDto(userRepository.findById(userId).get());
+    }
+
+    @Override
+    public UserDto getUserById(String userId) {
+        UserDto userDto = userMapper.userToUserDto(userRepository.findById(userId).get());
+        try {
+            String imageAvatar = imagesAvatarRepository.getImageAvatarByUserId(userId);
+            userDto.setImageAvatar(imageAvatar);
+        } catch (NullPointerException e) {}
+        return userDto;
+
     }
 }

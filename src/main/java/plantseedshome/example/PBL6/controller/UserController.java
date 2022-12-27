@@ -63,6 +63,11 @@ public class UserController {
     public ResponseEntity<UserDto> unActiveUser(@RequestParam String userId, @RequestParam boolean isActive) {
            UserDto userDto =  userService.changeActive(userId, isActive);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/getUerById")
+    public ResponseEntity<UserDto> getUserById(@RequestParam String userId) {
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 }
