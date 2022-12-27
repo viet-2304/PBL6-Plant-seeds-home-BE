@@ -125,7 +125,7 @@ public class CartServiceImpl implements CartService {
                             products.getProductId(),
                             products.getProductName(),
                             products.getPrice() + "",
-                            imagesProductRepository.findImagesProductByProductId(products.getProductId()) +"",
+                            imagesProductRepository.findImagesProductByProductId(products.getProductId()),
                             products.getShops().getShopId(),
                             products.getShops().getShopName()
                     )

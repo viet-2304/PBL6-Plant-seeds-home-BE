@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/getUerById")
+    @GetMapping("/getUserById")
     public ResponseEntity<UserDto> getUserById(@RequestParam String userId) {
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }

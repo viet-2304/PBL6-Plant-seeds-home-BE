@@ -117,6 +117,11 @@ public class OrderServiceImpl implements OrderService {
        return getOrderResponseWithListProductByOrderId(orderId);
     }
 
+    @Override
+    public List<BestSellerDto> get5ProductBestSeller() {
+        return productOrderDetailService.getBestSellerProduct().subList(0,5);
+    }
+
     private void updateOrderDetailStatus(String orderDetailId, String statusId) {
         OrderDetails orderDetails = ordersDetailRepository.findById(orderDetailId).get();
         orderDetails.setOrderStatus(orderStatusRepository.getReferenceById(statusId));

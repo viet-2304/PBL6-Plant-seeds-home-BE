@@ -3,6 +3,7 @@ package plantseedshome.example.PBL6.Services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import plantseedshome.example.PBL6.DAO.entity.ImageAvatar;
 import plantseedshome.example.PBL6.DAO.entity.User;
 import plantseedshome.example.PBL6.DAO.repository.ImagesAvatarRepository;
 import plantseedshome.example.PBL6.DAO.repository.RoleRepository;
@@ -77,9 +78,12 @@ public class UserServiceImpl implements UserService {
                 user.setAddress(userDto.getAddress());
                 user.setEmail(userDto.getEmail());
                 user.setPhoneNumber(userDto.getPhoneNumber());
-                imagesAvatarRepository.updateAvatarImage(userDto.getId(), userDto.getImageAvatar());
+                user.setActive(user.isActive());
             userRepository.save(user);
-            return userMapper.userToUserDto(user);
+            updateImageAvatar(userDto.getId(), userDto.getImageAvatar());
+            UserDto userDto1 = userMapper.userToUserDto(user);
+            userDto1.setImageAvatar(userDto.getImageAvatar());
+            return userDto1;
         }
         return null;
     }
@@ -107,6 +111,18 @@ public class UserServiceImpl implements UserService {
             userDto.setImageAvatar(imageAvatar);
         } catch (NullPointerException e) {}
         return userDto;
+    }
+
+    private void updateImageAvatar(String userId, String imageAvatar) {
+        try{
+            if (imagesAvatarRepository.getImageAvatarByUserId(userId) == null) {
+                imagesAvatarRepository.save(new ImageAvatar("", imageAvatar, userRepository.findById(userId).get(), null));
+            }else {
+                imagesAvatarRepository.updateAvatarImage(userId, imageAvatar);
+            }
+        } catch (NullPointerException e){
+
+        }
 
     }
 }
