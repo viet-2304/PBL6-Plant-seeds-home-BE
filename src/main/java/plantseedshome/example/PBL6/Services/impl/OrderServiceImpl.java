@@ -171,6 +171,7 @@ public class OrderServiceImpl implements OrderService {
     private List<ProductResponseWithOrderDto> getProductResponseWithOrderDto(String orderDetailId){
        List<ProductOrderDetailDto> listProductOrderDetailDto = productOrderDetailService.findProductOrderDetailDtoByOrderDetailId(orderDetailId);
        List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = new ArrayList<>();
+
         if(!listProductOrderDetailDto.isEmpty()) {
             listProductOrderDetailDto.forEach(productOrderDetailDto -> {
                 Products products = productRepository.findById(productOrderDetailDto.getProductId()).get();

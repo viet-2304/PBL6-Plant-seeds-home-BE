@@ -54,7 +54,6 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto findProductById(String id) {
         List<String> imagesUrl = imagesProductRepository.findImagesProductByProductId(id);
         if(productRepository.findById(id).isPresent()) {
-
         ProductDto productDto = productMapper.productToProductDto(productRepository.findById(id).get());
         productDto.setImagesUrl(imagesUrl);
         return productDto;
