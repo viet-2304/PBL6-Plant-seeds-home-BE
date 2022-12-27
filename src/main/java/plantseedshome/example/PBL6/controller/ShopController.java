@@ -40,13 +40,21 @@ public class ShopController {
 
     @PostMapping("/addNewShop")
     public ResponseEntity<String> addNewShop(@RequestBody ShopDto shopDto) {
-        shopService.addNewShop(shopDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+       String response = shopService.addNewShop(shopDto);
+       if(response == "success") {
+           return new ResponseEntity<>(HttpStatus.OK);
+       }
+       return new ResponseEntity<>(HttpStatus.SEE_OTHER);
     }
 
     @PostMapping("/updateShop")
     public ResponseEntity<String> updateShop(@RequestBody ShopDto shopDto) {
         shopService.editShop(shopDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/getShopById")
+    public ResponseEntity<ShopDto> getShopById(@RequestParam String shopId) {
+       return new ResponseEntity<>(shopService.getShopById(shopId), HttpStatus.OK);
     }
 }

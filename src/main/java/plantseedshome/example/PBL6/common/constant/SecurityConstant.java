@@ -11,5 +11,11 @@ public class SecurityConstant {
     public static final String PATH="/";
     public static final String GET_ALL_PRODUCT = "/api/v1/product/*";
     public static final String VERIFICATION_EMAIL = "/api/v1/users/verify";
-    public static final String[] PUBLIC_MATCHERS = {LOGIN_PATH, VERIFICATION_EMAIL, REGISTER_PATH, GET_ALL_PRODUCT, PATH};
+    public static final String FIND_ALL_SHOP="/api/v1/shop/getAllShop";
+
+    public static final String[] PUBLIC_MATCHERS = {LOGIN_PATH,
+            VERIFICATION_EMAIL,
+            REGISTER_PATH,
+            GET_ALL_PRODUCT,
+            PATH,FIND_ALL_SHOP};
 }
