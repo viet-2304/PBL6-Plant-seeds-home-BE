@@ -19,4 +19,7 @@ public interface ProductOrderDetailsRepository extends JpaRepository<ProductOrde
     @Transactional
     @Query("delete from ProductOrderDetails p where p.products.productId=?1")
     void deleteProductOrderDetailsByProductId(String productId);
+
+    @Query(value = "SELECT count(po.id), po.products.productId  from ProductOrderDetails po group by po.products.productId ORDER BY count(po.id) DESC ")
+    List<String> getCountOfProductInOrder();
 }

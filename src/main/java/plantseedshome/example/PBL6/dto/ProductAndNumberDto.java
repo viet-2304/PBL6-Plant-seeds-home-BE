@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,7 +17,7 @@ public class ProductAndNumberDto {
     public String productId;
     public String productName;
     public String price;
-    public String imagesUrl;
+    public List<String> imagesUrl;
     public String shopId;
     public String shopName;
 

@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import plantseedshome.example.PBL6.Services.OrderService;
+import plantseedshome.example.PBL6.dto.BestSellerDto;
 import plantseedshome.example.PBL6.dto.OrderRequestDto;
 import plantseedshome.example.PBL6.dto.OrderResponseWithListProductDto;
 import plantseedshome.example.PBL6.dto.OrderStatusRequestDto;
@@ -64,6 +65,12 @@ public class OrderController {
             return new ResponseEntity<>(orderResponseWithListProductDto, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/bestSeller")
+    public ResponseEntity<List<BestSellerDto>> getBestSellerProduct() {
+        List<BestSellerDto> bestSellerDtos = orderService.get5ProductBestSeller();
+        return new ResponseEntity<>(bestSellerDtos,HttpStatus.OK);
     }
 
 }
