@@ -20,7 +20,7 @@ public class CustomerUserDetailsServiceImpl implements CustomerUserDetailsServic
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
+        if (user == null) {
             throw new BadCredentialsException("User not valid");
         }
         return new CustomerUserDetails(user.get());

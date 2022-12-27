@@ -14,6 +14,7 @@ public class SecurityConstant {
     public static final String GET_PRODUCT_WITH_TYPE = "/api/v1/product/getProductWithType";
     public static final String GET_ALL_PRODUCT_TYPE = "/api/v1/product/getAllProductType";
     public static final String GET_PRODUCT_BY_SHOP = "/api/v1/product/getProductByShop";
+    public static final String GET_PRODUCT_BEST_SELLER = "/api/v1/product/getBestSeller";
     public static final String VERIFICATION_EMAIL = "/api/v1/users/verify";
     public static final String FIND_ALL_SHOP="/api/v1/shop/getAllShop";
 
@@ -26,6 +27,7 @@ public class SecurityConstant {
             GET_PRODUCT_BY_ID,
             GET_PRODUCT_WITH_TYPE,
             GET_ALL_PRODUCT_TYPE,
-            GET_PRODUCT_BY_SHOP
+            GET_PRODUCT_BY_SHOP,
+            GET_PRODUCT_BEST_SELLER
     };
 }

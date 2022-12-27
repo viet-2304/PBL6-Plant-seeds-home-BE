@@ -47,8 +47,8 @@ public class PaypalController {
                     paypalDto.getMethod(),
                     "sale",
                     paypalDto.getDescription(),
-                    "http://localhost:3000/api/v1/" + CANCEL_URL,
-                    "http://localhost:3000/api/v1/" + SUCCESS_URL);
+                    "https://pbl-6-plant-seeds-home.vercel.app/api/v1/" + CANCEL_URL,
+                    "https://pbl-6-plant-seeds-home.vercel.app/api/v1/" + SUCCESS_URL);
 
             for(Links link:payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {

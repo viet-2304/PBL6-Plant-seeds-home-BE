@@ -60,13 +60,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getCurrentUser(String email) {
        UserDto userDto = userMapper.userToUserDto(userRepository.findByEmail(email).get());
-       try {
+
            String imageAvatar = imagesAvatarRepository.getImageAvatarByUserId(userDto.getId());
-           if (!imageAvatar.isEmpty()) {
+           if (imageAvatar != null) {
                userDto.setImageAvatar(imageAvatar);
            }
-       } catch (NullPointerException e) {
-       }
+
        return userDto;
     }
 

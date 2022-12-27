@@ -38,7 +38,7 @@ public class ShopServiceImpl implements ShopService {
     public ShopDto findByUserId(String userId) {
         ShopDto shopDto =   shopMapper.shopToShopDto(shopRepository.findShopsByUserId(userId));
         String imageUrl = imagesAvatarRepository.getShopImagesByShopId(shopDto.getShopId());
-        if (!imageUrl.isEmpty()) {
+        if (imageUrl != null) {
             shopDto.setImageUrl(imageUrl);
         }
         return shopDto;
@@ -78,7 +78,7 @@ public class ShopServiceImpl implements ShopService {
     public ShopDto getShopById(String shopId) {
         ShopDto shopDto= shopMapper.shopToShopDto(shopRepository.findById(shopId).get());
         String imagesUrl = imagesAvatarRepository.getShopImagesByShopId(shopId);
-        if (!imagesUrl.isEmpty()) {
+        if (imagesUrl != null) {
             shopDto.setImageUrl(imagesUrl);
         }
         return  shopDto;
