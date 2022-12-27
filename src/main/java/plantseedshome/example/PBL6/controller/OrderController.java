@@ -67,10 +67,5 @@ public class OrderController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/bestSeller")
-    public ResponseEntity<List<BestSellerDto>> getBestSellerProduct() {
-        List<BestSellerDto> bestSellerDtos = orderService.get5ProductBestSeller();
-        return new ResponseEntity<>(bestSellerDtos,HttpStatus.OK);
-    }
 
 }

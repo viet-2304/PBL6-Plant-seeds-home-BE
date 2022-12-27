@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import plantseedshome.example.PBL6.DAO.entity.ProductType;
+import plantseedshome.example.PBL6.Services.OrderService;
 import plantseedshome.example.PBL6.Services.ProductService;
+import plantseedshome.example.PBL6.dto.BestSellerDto;
 import plantseedshome.example.PBL6.dto.ProductDto;
 import plantseedshome.example.PBL6.dto.ProductRequestDto;
 
@@ -30,6 +32,9 @@ public class ProductController {
 
     @Autowired
     ServletContext servletContext;
+
+    @Autowired
+    OrderService orderService;
 
     private List<String> urlImage = new ArrayList<>();
 
@@ -66,6 +71,12 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getProductByShop(@RequestParam String shopId){
         List<ProductDto> productDtoList = productService.findProductByShopId(shopId);
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/getBestSeller")
+    public ResponseEntity<List<BestSellerDto>> getBestSellerProduct() {
+        List<BestSellerDto> bestSellerDtos = orderService.get5ProductBestSeller();
+        return new ResponseEntity<>(bestSellerDtos,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('SELLER')")
