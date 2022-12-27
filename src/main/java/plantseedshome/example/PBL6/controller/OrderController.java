@@ -56,6 +56,7 @@ public class OrderController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','SELLER')")
     @PostMapping("/updateStatus")
     public ResponseEntity<OrderResponseWithListProductDto> editOrderStatus(@RequestBody OrderStatusRequestDto orderStatusRequestDto) {
         OrderResponseWithListProductDto orderResponseWithListProductDto = orderService.updateOrderStatus(orderStatusRequestDto);

@@ -9,7 +9,11 @@ public class SecurityConstant {
     public static final String LOGIN_PATH = "/api/v1/auth/login";
     public static final String REGISTER_PATH = "/api/v1/users/createUser";
     public static final String PATH="/";
-    public static final String GET_ALL_PRODUCT = "/api/v1/product/*";
+    public static final String GET_ALL_PRODUCT = "/api/v1/product/getAllProduct";
+    public static final String GET_PRODUCT_BY_ID = "/api/v1/product/getProduct";
+    public static final String GET_PRODUCT_WITH_TYPE = "/api/v1/product/getProductWithType";
+    public static final String GET_ALL_PRODUCT_TYPE = "/api/v1/product/getAllProductType";
+    public static final String GET_PRODUCT_BY_SHOP = "/api/v1/product/getProductByShop";
     public static final String VERIFICATION_EMAIL = "/api/v1/users/verify";
     public static final String FIND_ALL_SHOP="/api/v1/shop/getAllShop";
 
@@ -17,5 +21,11 @@ public class SecurityConstant {
             VERIFICATION_EMAIL,
             REGISTER_PATH,
             GET_ALL_PRODUCT,
-            PATH,FIND_ALL_SHOP};
+            PATH,
+            FIND_ALL_SHOP,
+            GET_PRODUCT_BY_ID,
+            GET_PRODUCT_WITH_TYPE,
+            GET_ALL_PRODUCT_TYPE,
+            GET_PRODUCT_BY_SHOP
+    };
 }

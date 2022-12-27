@@ -15,7 +15,7 @@ public class ProductAndNumberDto {
     public String productId;
     public String productName;
     public String price;
-    public String imageProduct;
+    public String imagesUrl;
     public String shopId;
     public String shopName;
 

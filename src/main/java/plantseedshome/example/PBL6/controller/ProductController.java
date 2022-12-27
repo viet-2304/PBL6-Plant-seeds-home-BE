@@ -68,6 +68,7 @@ public class ProductController {
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     @PostMapping("/addNewProduct")
     public ResponseEntity<String> createNewProduct(@RequestBody String request) {
         Gson gson = new Gson();
@@ -101,11 +102,13 @@ public class ProductController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     @DeleteMapping("/deleteProduct")
     public ResponseEntity<String> deleteProduct(@RequestParam("productId") String productId) {
       return new ResponseEntity<>(productService.deleteProduct(productId),HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     @PostMapping("/addProductImage")
     public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles) {
         return productService.saveProductImage(multipartFiles);
