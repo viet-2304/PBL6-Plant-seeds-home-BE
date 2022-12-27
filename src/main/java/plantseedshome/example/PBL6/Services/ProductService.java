@@ -23,4 +23,8 @@ public interface ProductService {
     String saveProductImage(MultipartFile multipartFile);
 
     List<ProductDto> findProductByShopId(String shopId);
+
+    ProductDto updateProduct(ProductRequestDto productRequestDto);
+
+    String deleteProduct(String productId);
 }

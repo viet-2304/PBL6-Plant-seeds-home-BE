@@ -24,3 +24,4 @@ public interface ProductRepository extends JpaRepository<Products, String> {
     @Query("select p from Products p where p.shops.shopId= ?1")
     Optional<List<Products>> findProductsByShopId(String shopId);
 }
+

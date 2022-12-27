@@ -88,9 +88,25 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    @PostMapping("/editProduct")
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody String productDto) {
+        Gson gson = new Gson();
+        ProductRequestDto productRequestDto = gson.fromJson(productDto, ProductRequestDto.class);
+        ProductDto response = productService.updateProduct(productRequestDto);
+        if(response != null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/deleteProduct")
+    public ResponseEntity<String> deleteProduct(@RequestParam("productId") String productId) {
+      return new ResponseEntity<>(productService.deleteProduct(productId),HttpStatus.OK);
+    }
+
     @PostMapping("/addProductImage")
     public String saveProductImage(@RequestParam("image") MultipartFile multipartFiles) {
-
         return productService.saveProductImage(multipartFiles);
     }
 

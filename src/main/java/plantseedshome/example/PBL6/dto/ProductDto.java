@@ -20,7 +20,7 @@ public class ProductDto {
     private int price;
     private int rating;
     private int numberOfProduct;
-    private List<String> imageURL;
+    private List<String> imagesUrl;
     private String shops;
     private String productType;
 }

@@ -46,6 +46,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderStatusRepository orderStatusRepository;
+
+    @Autowired
+    ImagesProductRepository imagesProductRepository;
+
     @Override
     public List<OrderResponseWithListProductDto> findOrderByUserId(String userId) {
         List<OrderResponseWithListProductDto> orderResponseWithListProductDtos = new ArrayList<>();
@@ -77,9 +81,14 @@ public class OrderServiceImpl implements OrderService {
         ordersList.forEach(orders -> {
             OrderResponseDto orderResponseDto = orderMapper.orderToOrderResponseDto(orders);
             List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = getProductResponseWithOrderDto(orders.getOrderDetails().getId());
+            if(!productResponseWithOrderDtoList.isEmpty())
+            {
+
             if(productResponseWithOrderDtoList.get(0).getShopId().equals(shopId) ) {
                 orderResponseWithListProductDtos.add(new OrderResponseWithListProductDto(orderResponseDto,productResponseWithOrderDtoList));
             }
+            }
+
         });
         return  orderResponseWithListProductDtos;
 
@@ -111,6 +120,7 @@ public class OrderServiceImpl implements OrderService {
     private void updateOrderDetailStatus(String orderDetailId, String statusId) {
         OrderDetails orderDetails = ordersDetailRepository.findById(orderDetailId).get();
         orderDetails.setOrderStatus(orderStatusRepository.getReferenceById(statusId));
+        ordersDetailRepository.save(orderDetails);
     }
     private OrderResponseWithListProductDto getOrderResponseWithListProductByOrderId(String orderId) {
         Orders orders =  ordersRepository.findById(orderId).get();
@@ -160,22 +170,24 @@ public class OrderServiceImpl implements OrderService {
 
     private List<ProductResponseWithOrderDto> getProductResponseWithOrderDto(String orderDetailId){
        List<ProductOrderDetailDto> listProductOrderDetailDto = productOrderDetailService.findProductOrderDetailDtoByOrderDetailId(orderDetailId);
-       System.out.println(listProductOrderDetailDto);
        List<ProductResponseWithOrderDto> productResponseWithOrderDtoList = new ArrayList<>();
 
-       listProductOrderDetailDto.forEach(productOrderDetailDto -> {
-           Products products = productRepository.findById(productOrderDetailDto.getProductId()).get();
-           System.out.println(products.getProductId());
-            ProductResponseWithOrderDto productResponseWithOrderDto = new ProductResponseWithOrderDto(
-                    products.getProductId(),
-                    products.getProductName(),
-                    products.getShops().getShopId(),
-                    products.getShops().getShopName(),
-                    productOrderDetailDto.getNumber(),
-                    productOrderDetailDto.getTotalOfProduct()
-            );
-           productResponseWithOrderDtoList.add(productResponseWithOrderDto);
-       });
+        if(!listProductOrderDetailDto.isEmpty()) {
+            listProductOrderDetailDto.forEach(productOrderDetailDto -> {
+                Products products = productRepository.findById(productOrderDetailDto.getProductId()).get();
+                List<String> imagesUrl = imagesProductRepository.findImagesProductByProductId(products.getProductId());
+                ProductResponseWithOrderDto productResponseWithOrderDto = new ProductResponseWithOrderDto(
+                        products.getProductId(),
+                        products.getProductName(),
+                        imagesUrl,
+                        products.getShops().getShopId(),
+                        products.getShops().getShopName(),
+                        productOrderDetailDto.getNumber(),
+                        productOrderDetailDto.getTotalOfProduct()
+                );
+                productResponseWithOrderDtoList.add(productResponseWithOrderDto);
+            });
+        }
        return productResponseWithOrderDtoList;
     }
 }

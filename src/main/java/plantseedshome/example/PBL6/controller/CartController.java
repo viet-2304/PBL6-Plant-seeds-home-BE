@@ -42,7 +42,13 @@ public class CartController {
 
     @PostMapping("/addToCart")
     public ResponseEntity<String> addNewProductToCart(@RequestBody CartDto cartDto) {
-        cartService.addProductToCart(cartDto);
+       String res = cartService.addProductToCart(cartDto);
+       if(res=="outOffNumber") {
+           return new ResponseEntity<>("Out off number in product", HttpStatus.EXPECTATION_FAILED);
+       }
+       if(res == "notFound") {
+           return new ResponseEntity<>("Product not found",HttpStatus.NOT_FOUND);
+       }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

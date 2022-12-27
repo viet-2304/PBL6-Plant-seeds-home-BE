@@ -12,7 +12,7 @@ public interface CartService {
     CartResponseDto getCartWithId(String id);
     ProductResponseWithUserIdDto getCartWithUserId(String userId);
     CartDto findCartDtoByCartId(String id);
-    void addProductToCart(CartDto cartDto);
+    String addProductToCart(CartDto cartDto);
     void updateProductInCart(CartDto cartDto);
     void deleteProductInCart(String id);
 }

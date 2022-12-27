@@ -30,6 +30,9 @@ public class ProductOrderDetailServiceImpl implements ProductOrderDetailService 
     public List<ProductOrderDetailDto> findProductOrderDetailDtoByOrderDetailId(String oderDetailId) {
         List<ProductOrderDetailDto> productOrderDetailDtoList = new ArrayList<>();
         List<ProductOrderDetails> productOrderDetails = productOrderDetailsRepository.findProductOrderDetailsByOrderDetailId(oderDetailId);
+        if (productOrderDetails.isEmpty()) {
+            return productOrderDetailDtoList;
+        }
              productOrderDetails.forEach(productOrderDetail -> {
                  productOrderDetailDtoList.add(productOrderDetailMapper.productOrderDetailToProductOrderDetailDto(productOrderDetail));
              });

@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class ProductRequestDto {
+    private String productId;
     private String productName;
     private String description;
     private Date EXP;
