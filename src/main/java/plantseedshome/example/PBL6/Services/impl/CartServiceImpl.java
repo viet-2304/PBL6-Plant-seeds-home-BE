@@ -79,7 +79,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addProductToCart(CartDto cartDto) {
+    public String addProductToCart(CartDto cartDto) {
+        if(productService.findProductById(cartDto.getProductId()) == null) {
+            return "notFound";
+        }
+        if(productService.findProductById(cartDto.getProductId()).getNumberOfProduct() < Integer.parseInt(cartDto.number)) {
+            return "outOffNumber";
+        }
         if(cartRepository.findByUserAndProduct(cartDto.userId, cartDto.productId).isPresent()) {
             Carts carts = cartRepository.findByUserAndProduct(cartDto.userId, cartDto.productId).get();
             cartRepository.updateProductInCart(
@@ -89,6 +95,7 @@ public class CartServiceImpl implements CartService {
         else {
             cartRepository.save(cartMapper.cartDtoToCart(cartDto));
         }
+        return null;
     }
 
     @Override
